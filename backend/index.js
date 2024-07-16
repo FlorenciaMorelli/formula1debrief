@@ -157,6 +157,22 @@ app.get('/users', async (req, res) => {
     }
 });
 
+// Get user by ID
+app.get('/users/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+      const unUser = await User.findByPk(id);
+      if (unUser === null) {
+        res.status(404).json({ error: `No se encontró user con ID ${id}.` });
+      } else {
+        res.json(unUser);
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+    }
+  });
+
 /* RACES */
 // Get races
 app.get('/races', async (req, res) => {
