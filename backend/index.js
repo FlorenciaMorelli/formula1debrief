@@ -401,6 +401,72 @@ app.get('/reviews', async (req, res) => {
     }
 });
 
+// Obtain review by ID
+app.get('/reviews/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const unReview = await Review.findByPk(id);
+        if (unReview === null) {
+            res.status(404).json({ error: `No se encontró review con ID ${id}.` });
+        } else {
+            res.json(unReview);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+    }
+});
+
+// Post new review
+app.post('/reviews', async (req, res) => {
+    try {
+        const unReview = await Review.build(req.body)
+        await unReview.validate()
+        const validatedReview = await Review.create(req.body)
+        res.json({ id: validatedReview.id })
+    } catch (error) {
+        console.error(error);
+        res.status(409).json({ error: error });
+    }
+});
+
+// Edit review
+app.patch('/reviews/:id', async (req, res) => {
+    const { id } = req.params;
+    const unReview = req.body;
+    try {
+        const [, affectedRows] = await Review.update(
+            unReview,
+            { where: { id } }
+        );
+        if (affectedRows === 0) {
+            res.status(404).json({ error: `No se encontró review con ID ${id}.` });
+        } else {
+            res.json({ id: id });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+    }
+});
+
+// Delete review
+app.delete('/reviews/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const unReview = await Review.findOne({ where: { id } });
+        if (!unReview) {
+            return res.status(404).json({ error: 'Review no encontrado' });
+        }
+        await unReview.destroy();
+        res.json('Review deleted');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
 
 /* DATABASE */
 async function popular() {
