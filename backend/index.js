@@ -52,8 +52,8 @@ const User = sequelize.define('User', {
 const Race = sequelize.define('Race', {
     raceId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        unique: true
+        primaryKey: true,
+        autoIncrement: true,
     },
     raceName: {
         type: DataTypes.STRING,
@@ -161,29 +161,29 @@ app.get('/users', async (req, res) => {
 app.get('/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
-      const unUser = await User.findByPk(id);
-      if (unUser === null) {
-        res.status(404).json({ error: `No se encontró user con ID ${id}.` });
-      } else {
-        res.json(unUser);
-      }
+        const unUser = await User.findByPk(id);
+        if (unUser === null) {
+            res.status(404).json({ error: `No se encontró user con ID ${id}.` });
+        } else {
+            res.json(unUser);
+        }
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+        console.error(error);
+        res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
     }
-  });
+});
 
 // Post new user
 app.post('/users', async (req, res) => {
-  try {
-    const unUser = await User.build(req.body)
-    await unUser.validate()
-    const validatedUser = await User.create(req.body)
-    res.json({id: validatedUser.id})
-  } catch (error) {
-    console.error(error);
-    res.status(409).json({ error: error });
-  }
+    try {
+        const unUser = await User.build(req.body)
+        await unUser.validate()
+        const validatedUser = await User.create(req.body)
+        res.json({ id: validatedUser.id })
+    } catch (error) {
+        console.error(error);
+        res.status(409).json({ error: error });
+    }
 });
 
 // Edit user
@@ -191,36 +191,36 @@ app.patch('/users/:id', async (req, res) => {
     const { id } = req.params;
     const unUser = req.body;
     try {
-      const [, affectedRows] = await User.update(
-        unUser,
-        { where: { id } }
-      );
-      if (affectedRows === 0) {
-        res.status(404).json({ error: `No se encontró user con ID ${id}.` });
-      } else {
-        res.json({ id: id });
-      }
+        const [, affectedRows] = await User.update(
+            unUser,
+            { where: { id } }
+        );
+        if (affectedRows === 0) {
+            res.status(404).json({ error: `No se encontró user con ID ${id}.` });
+        } else {
+            res.json({ id: id });
+        }
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+        console.error(error);
+        res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
     }
-  });
+});
 
-  // Delete user
-  app.delete('/users/:id', async (req, res) => {
+// Delete user
+app.delete('/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
-      const unUser = await User.findOne({ where: { id } });
-      if (!unUser) {
-        return res.status(404).json({ error: 'User no encontrado' });
-      }
-      await unUser.destroy();
-      res.json('User eliminado');
+        const unUser = await User.findOne({ where: { id } });
+        if (!unUser) {
+            return res.status(404).json({ error: 'User no encontrado' });
+        }
+        await unUser.destroy();
+        res.json('User eliminado');
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-  });
+});
 
 
 /* RACES */
@@ -234,6 +234,72 @@ app.get('/races', async (req, res) => {
         res.status(500).json({ error: "Error fetching races" });
     }
 });
+
+// Obtain race by ID
+app.get('/races/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const unRace = await Race.findByPk(id);
+        if (unRace === null) {
+            res.status(404).json({ error: `No se encontró race con ID ${id}.` });
+        } else {
+            res.json(unRace);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+    }
+});
+
+// Post new race
+app.post('/races', async (req, res) => {
+    try {
+        const unRace = await Race.build(req.body)
+        await unRace.validate()
+        const validatedRace = await Race.create(req.body)
+        res.json({ id: validatedRace.raceId })
+    } catch (error) {
+        console.error(error);
+        res.status(409).json({ error: error });
+    }
+});
+
+// Edit race
+app.patch('/races/:raceId', async (req, res) => {
+    const { raceId } = req.params;
+    const unRace = req.body;
+    try {
+        const [, affectedRows] = await Race.update(
+            unRace,
+            { where: { raceId } }
+        );
+        if (affectedRows === 0) {
+            res.status(404).json({ error: `No se encontró race con ID ${raceId}.` });
+        } else {
+            res.json({ id: raceId });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+    }
+});
+
+// Delete race
+app.delete('/races/:raceId', async (req, res) => {
+    const { raceId } = req.params;
+    try {
+        const unRace = await Race.findOne({ where: { raceId } });
+        if (!unRace) {
+            return res.status(404).json({ error: 'Race no encontrado' });
+        }
+        await unRace.destroy();
+        res.json('Race deleted');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 /* COMMENTS */
 // Get comments
@@ -274,17 +340,17 @@ async function popular() {
         ];
 
         const races = [
-            { raceId: 1, raceName: "Bahrain Grand Prix", circuit: "Bahrain International Circuit", date: new Date("2024-03-03"), time: "15:00:00" },
-            { raceId: 2, raceName: "Saudi Arabian Grand Prix", circuit: "Jeddah Corniche Circuit", date: new Date("2024-03-17"), time: "17:00:00" },
-            { raceId: 3, raceName: 'Australian Grand Prix', circuit: 'Albert Park Circuit', date: new Date('2024-03-24'), time: '04:00:00' },
-            { raceId: 4, raceName: 'Japanese Grand Prix', circuit: 'Suzuka Circuit', date: new Date('2024-04-07'), time: '06:00:00' },
-            { raceId: 5, raceName: 'Chinese Grand Prix', circuit: 'Shanghai International Circuit', date: new Date('2024-04-21'), time: '14:00:00' },
-            { raceId: 6, raceName: 'Miami Grand Prix', circuit: 'Miami International Autodrome', date: new Date('2024-05-05'), time: '15:30:00' },
-            { raceId: 7, raceName: 'Emilia Romagna Grand Prix', circuit: 'Imola Circuit', date: new Date('2024-05-19'), time: '15:00:00' },
-            { raceId: 8, raceName: 'Monaco Grand Prix', circuit: 'Circuit de Monaco', date: new Date('2024-05-26'), time: '15:00:00' },
-            { raceId: 9, raceName: 'Canadian Grand Prix', circuit: 'Circuit Gilles Villeneuve', date: new Date('2024-06-09'), time: '14:00:00' },
-            { raceId: 10, raceName: 'Austrian Grand Prix', circuit: 'Red Bull Ring', date: new Date('2024-06-23'), time: '15:00:00' },
-            { raceId: 11, raceName: 'British Grand Prix', circuit: 'Silverstone Circuit', date: new Date('2024-07-07'), time: '15:00:00' }
+            { raceName: "Bahrain Grand Prix", circuit: "Bahrain International Circuit", date: new Date("2024-03-03"), time: "15:00:00" },
+            { raceName: "Saudi Arabian Grand Prix", circuit: "Jeddah Corniche Circuit", date: new Date("2024-03-17"), time: "17:00:00" },
+            { raceName: 'Australian Grand Prix', circuit: 'Albert Park Circuit', date: new Date('2024-03-24'), time: '04:00:00' },
+            { raceName: 'Japanese Grand Prix', circuit: 'Suzuka Circuit', date: new Date('2024-04-07'), time: '06:00:00' },
+            { raceName: 'Chinese Grand Prix', circuit: 'Shanghai International Circuit', date: new Date('2024-04-21'), time: '14:00:00' },
+            { raceName: 'Miami Grand Prix', circuit: 'Miami International Autodrome', date: new Date('2024-05-05'), time: '15:30:00' },
+            { raceName: 'Emilia Romagna Grand Prix', circuit: 'Imola Circuit', date: new Date('2024-05-19'), time: '15:00:00' },
+            { raceName: 'Monaco Grand Prix', circuit: 'Circuit de Monaco', date: new Date('2024-05-26'), time: '15:00:00' },
+            { raceName: 'Canadian Grand Prix', circuit: 'Circuit Gilles Villeneuve', date: new Date('2024-06-09'), time: '14:00:00' },
+            { raceName: 'Austrian Grand Prix', circuit: 'Red Bull Ring', date: new Date('2024-06-23'), time: '15:00:00' },
+            { raceName: 'British Grand Prix', circuit: 'Silverstone Circuit', date: new Date('2024-07-07'), time: '15:00:00' }
         ];
 
         const reviews = [
