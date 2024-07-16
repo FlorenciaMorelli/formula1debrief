@@ -146,7 +146,7 @@ app.get('/', (req, res) => {
 });
 
 /* USERS */
-// Get users
+// Obtain all users
 app.get('/users', async (req, res) => {
     try {
         const users = await User.findAll();
@@ -157,7 +157,7 @@ app.get('/users', async (req, res) => {
     }
 });
 
-// Get user by ID
+// Obtain user by ID
 app.get('/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
@@ -172,6 +172,56 @@ app.get('/users/:id', async (req, res) => {
       res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
     }
   });
+
+// Post new user
+app.post('/users', async (req, res) => {
+  try {
+    const unUser = await User.build(req.body)
+    await unUser.validate()
+    const validatedUser = await User.create(req.body)
+    res.json({id: validatedUser.id})
+  } catch (error) {
+    console.error(error);
+    res.status(409).json({ error: error });
+  }
+});
+
+// Edit user
+app.patch('/users/:id', async (req, res) => {
+    const { id } = req.params;
+    const unUser = req.body;
+    try {
+      const [, affectedRows] = await User.update(
+        unUser,
+        { where: { id } }
+      );
+      if (affectedRows === 0) {
+        res.status(404).json({ error: `No se encontró user con ID ${id}.` });
+      } else {
+        res.json({ id: id });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+    }
+  });
+
+  // Delete user
+  app.delete('/users/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+      const unUser = await User.findOne({ where: { id } });
+      if (!unUser) {
+        return res.status(404).json({ error: 'User no encontrado' });
+      }
+      await unUser.destroy();
+      res.json('User eliminado');
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
 
 /* RACES */
 // Get races
