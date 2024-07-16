@@ -79,6 +79,11 @@ const Race = sequelize.define('Race', {
 });
 
 const Review = sequelize.define('Review', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     rating: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -103,6 +108,11 @@ const Review = sequelize.define('Review', {
 });
 
 const Comment = sequelize.define('Comment', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     comment: {
         type: DataTypes.TEXT
     },
@@ -312,6 +322,72 @@ app.get('/comments', async (req, res) => {
         res.status(500).json({ error: "Error fetching comments" });
     }
 });
+
+// Obtain comment by ID
+app.get('/comments/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const unComment = await Comment.findByPk(id);
+        if (unComment === null) {
+            res.status(404).json({ error: `No se encontró comment con ID ${id}.` });
+        } else {
+            res.json(unComment);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+    }
+});
+
+// Post new comment
+app.post('/comments', async (req, res) => {
+    try {
+        const unComment = await Comment.build(req.body)
+        await unComment.validate()
+        const validatedComment = await Comment.create(req.body)
+        res.json({ id: validatedComment.id })
+    } catch (error) {
+        console.error(error);
+        res.status(409).json({ error: error });
+    }
+});
+
+// Edit comment
+app.patch('/comments/:id', async (req, res) => {
+    const { id } = req.params;
+    const unComment = req.body;
+    try {
+        const [, affectedRows] = await Comment.update(
+            unComment,
+            { where: { id } }
+        );
+        if (affectedRows === 0) {
+            res.status(404).json({ error: `No se encontró comment con ID ${id}.` });
+        } else {
+            res.json({ id: id });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+    }
+});
+
+// Delete comment
+app.delete('/comments/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+        const unComment = await Comment.findOne({ where: { id } });
+        if (!unComment) {
+            return res.status(404).json({ error: 'Comment no encontrado' });
+        }
+        await unComment.destroy();
+        res.json('Comment deleted');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 /* REVIEWS */
 // Get reviews
