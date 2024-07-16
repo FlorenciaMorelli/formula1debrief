@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require('cors');
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 const bodyParser = require('body-parser');
 const { Sequelize, DataTypes } = require("sequelize");
 
@@ -124,26 +124,40 @@ const Comment = sequelize.define('Comment', {
     timestamps: false
 });
 
-User.hasMany(Review, { foreignKey: 'userId' });
+// Relationships with CASCADE delete that automatically deletes all the data asociated
+User.hasMany(Review, {
+    foreignKey: 'userId',
+    onDelete: 'CASCADE'
+});
 Review.belongsTo(User, { foreignKey: 'userId' });
 
-Race.hasMany(Review, { foreignKey: 'raceId' });
+Race.hasMany(Review, {
+    foreignKey: 'raceId',
+    onDelete: 'CASCADE'
+});
 Review.belongsTo(Race, { foreignKey: 'raceId' });
 
-Review.hasMany(Comment, { foreignKey: 'reviewId' });
+Review.hasMany(Comment, {
+    foreignKey: 'reviewId',
+    onDelete: 'CASCADE'
+});
 Comment.belongsTo(Review, { foreignKey: 'reviewId' });
 
-User.hasMany(Comment, { foreignKey: 'userId' });
+User.hasMany(Comment, {
+    foreignKey: 'userId',
+    onDelete: 'CASCADE'
+});
 Comment.belongsTo(User, { foreignKey: 'userId' });
 
+// Configurations, like CORS usage and body parsing to json
 app.use(cors());
 app.use(bodyParser.json());
 
-// sincronize database
+// Synchronize database
 sequelize.sync()
     .then(() => {
         app.listen(PORT, () => {
-            popular();
+            populateDatabase();
             console.log('El servidor está corriendo en el puerto ' + PORT);
         });
     })
@@ -173,13 +187,13 @@ app.get('/users/:id', async (req, res) => {
     try {
         const unUser = await User.findByPk(id);
         if (unUser === null) {
-            res.status(404).json({ error: `No se encontró user con ID ${id}.` });
+            res.status(404).json({ error: `No user found with ID ${id}.` });
         } else {
             res.json(unUser);
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+        res.status(500).json({ error: 'An error occurred while fetching the user.' });
     }
 });
 
@@ -206,13 +220,13 @@ app.patch('/users/:id', async (req, res) => {
             { where: { id } }
         );
         if (affectedRows === 0) {
-            res.status(404).json({ error: `No se encontró user con ID ${id}.` });
+            res.status(404).json({ error: `No user found with ID ${id}.` });
         } else {
             res.json({ id: id });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+        res.status(500).json({ error: 'An error occurred while updating the user.' });
     }
 });
 
@@ -222,10 +236,10 @@ app.delete('/users/:id', async (req, res) => {
     try {
         const unUser = await User.findOne({ where: { id } });
         if (!unUser) {
-            return res.status(404).json({ error: 'User no encontrado' });
+            return res.status(404).json({ error: 'User not found' });
         }
         await unUser.destroy();
-        res.json('User eliminado');
+        res.json('User deleted');
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -251,13 +265,13 @@ app.get('/races/:id', async (req, res) => {
     try {
         const unRace = await Race.findByPk(id);
         if (unRace === null) {
-            res.status(404).json({ error: `No se encontró race con ID ${id}.` });
+            res.status(404).json({ error: `No race found with ID ${id}.` });
         } else {
             res.json(unRace);
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+        res.status(500).json({ error: 'An error occurred while fetching the race.' });
     }
 });
 
@@ -284,13 +298,13 @@ app.patch('/races/:raceId', async (req, res) => {
             { where: { raceId } }
         );
         if (affectedRows === 0) {
-            res.status(404).json({ error: `No se encontró race con ID ${raceId}.` });
+            res.status(404).json({ error: `No race found with ID ${raceId}.` });
         } else {
             res.json({ id: raceId });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+        res.status(500).json({ error: 'An error occurred while updating the race.' });
     }
 });
 
@@ -300,7 +314,7 @@ app.delete('/races/:raceId', async (req, res) => {
     try {
         const unRace = await Race.findOne({ where: { raceId } });
         if (!unRace) {
-            return res.status(404).json({ error: 'Race no encontrado' });
+            return res.status(404).json({ error: 'Race not found' });
         }
         await unRace.destroy();
         res.json('Race deleted');
@@ -329,13 +343,13 @@ app.get('/comments/:id', async (req, res) => {
     try {
         const unComment = await Comment.findByPk(id);
         if (unComment === null) {
-            res.status(404).json({ error: `No se encontró comment con ID ${id}.` });
+            res.status(404).json({ error: `No comment found with ID ${id}.` });
         } else {
             res.json(unComment);
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+        res.status(500).json({ error: 'An error occurred while fetching the comment.' });
     }
 });
 
@@ -362,13 +376,13 @@ app.patch('/comments/:id', async (req, res) => {
             { where: { id } }
         );
         if (affectedRows === 0) {
-            res.status(404).json({ error: `No se encontró comment con ID ${id}.` });
+            res.status(404).json({ error: `No comment found with ID ${id}.` });
         } else {
             res.json({ id: id });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+        res.status(500).json({ error: 'An error occurred while updating the comment.' });
     }
 });
 
@@ -378,7 +392,7 @@ app.delete('/comments/:id', async (req, res) => {
     try {
         const unComment = await Comment.findOne({ where: { id } });
         if (!unComment) {
-            return res.status(404).json({ error: 'Comment no encontrado' });
+            return res.status(404).json({ error: 'Comment not found' });
         }
         await unComment.destroy();
         res.json('Comment deleted');
@@ -407,13 +421,13 @@ app.get('/reviews/:id', async (req, res) => {
     try {
         const unReview = await Review.findByPk(id);
         if (unReview === null) {
-            res.status(404).json({ error: `No se encontró review con ID ${id}.` });
+            res.status(404).json({ error: `No review found with ID  ${id}.` });
         } else {
             res.json(unReview);
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error al ejecutar la consulta.' });
+        res.status(500).json({ error: 'An error occurred while fetching the review.' });
     }
 });
 
@@ -440,13 +454,13 @@ app.patch('/reviews/:id', async (req, res) => {
             { where: { id } }
         );
         if (affectedRows === 0) {
-            res.status(404).json({ error: `No se encontró review con ID ${id}.` });
+            res.status(404).json({ error: `No review found with ID ${id}.` });
         } else {
             res.json({ id: id });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Ha ocurrido un error al actualizar los datos.' });
+        res.status(500).json({ error: 'An error occurred while updating the review.' });
     }
 });
 
@@ -456,7 +470,7 @@ app.delete('/reviews/:id', async (req, res) => {
     try {
         const unReview = await Review.findOne({ where: { id } });
         if (!unReview) {
-            return res.status(404).json({ error: 'Review no encontrado' });
+            return res.status(404).json({ error: 'Review not found' });
         }
         await unReview.destroy();
         res.json('Review deleted');
@@ -469,7 +483,7 @@ app.delete('/reviews/:id', async (req, res) => {
 
 
 /* DATABASE */
-async function popular() {
+async function populateDatabase() {
     const userCount = await User.count();
     const raceCount = await Race.count();
     const reviewCount = await Review.count();
@@ -510,20 +524,8 @@ async function popular() {
         await Review.bulkCreate(reviews, { validate: true });
         await Comment.bulkCreate(comments, { validate: true });
 
-        console.log("Datos iniciales insertados");
+        console.log("Database populated successfully.");
     } else {
-        console.log("La base de datos ya contiene datos");
+        console.log("Database is already full");
     }
-}
-
-
-function mezclarArreglo(arreglo) {
-    const mezclado = [...arreglo];
-    const q = arreglo.length;
-    for (let x = q * 2; x >= 0; x--) {
-        const j = Math.floor(Math.random() * q);
-        const i = Math.floor(Math.random() * q);
-        [mezclado[i], mezclado[j]] = [mezclado[j], mezclado[i]];
-    }
-    return mezclado;
 }
