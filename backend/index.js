@@ -185,11 +185,11 @@ app.get('/users', async (req, res) => {
 app.get('/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const unUser = await User.findByPk(id);
-        if (unUser === null) {
+        const user = await User.findByPk(id);
+        if (user === null) {
             res.status(404).json({ error: `No user found with ID ${id}.` });
         } else {
-            res.json(unUser);
+            res.json(user);
         }
     } catch (error) {
         console.error(error);
@@ -200,8 +200,8 @@ app.get('/users/:id', async (req, res) => {
 // Post new user
 app.post('/users', async (req, res) => {
     try {
-        const unUser = await User.build(req.body)
-        await unUser.validate()
+        const user = await User.build(req.body)
+        await user.validate()
         const validatedUser = await User.create(req.body)
         res.json({ id: validatedUser.id })
     } catch (error) {
@@ -213,10 +213,10 @@ app.post('/users', async (req, res) => {
 // Edit user
 app.patch('/users/:id', async (req, res) => {
     const { id } = req.params;
-    const unUser = req.body;
+    const user = req.body;
     try {
         const [, affectedRows] = await User.update(
-            unUser,
+            user,
             { where: { id } }
         );
         if (affectedRows === 0) {
@@ -234,11 +234,11 @@ app.patch('/users/:id', async (req, res) => {
 app.delete('/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const unUser = await User.findOne({ where: { id } });
-        if (!unUser) {
+        const user = await User.findOne({ where: { id } });
+        if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        await unUser.destroy();
+        await user.destroy();
         res.json('User deleted');
     } catch (error) {
         console.error(error);
@@ -263,11 +263,11 @@ app.get('/races', async (req, res) => {
 app.get('/races/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const unRace = await Race.findByPk(id);
-        if (unRace === null) {
+        const race = await Race.findByPk(id);
+        if (race === null) {
             res.status(404).json({ error: `No race found with ID ${id}.` });
         } else {
-            res.json(unRace);
+            res.json(race);
         }
     } catch (error) {
         console.error(error);
@@ -278,8 +278,8 @@ app.get('/races/:id', async (req, res) => {
 // Post new race
 app.post('/races', async (req, res) => {
     try {
-        const unRace = await Race.build(req.body)
-        await unRace.validate()
+        const race = await Race.build(req.body)
+        await race.validate()
         const validatedRace = await Race.create(req.body)
         res.json({ id: validatedRace.raceId })
     } catch (error) {
@@ -291,10 +291,10 @@ app.post('/races', async (req, res) => {
 // Edit race
 app.patch('/races/:raceId', async (req, res) => {
     const { raceId } = req.params;
-    const unRace = req.body;
+    const race = req.body;
     try {
         const [, affectedRows] = await Race.update(
-            unRace,
+            race,
             { where: { raceId } }
         );
         if (affectedRows === 0) {
@@ -312,11 +312,11 @@ app.patch('/races/:raceId', async (req, res) => {
 app.delete('/races/:raceId', async (req, res) => {
     const { raceId } = req.params;
     try {
-        const unRace = await Race.findOne({ where: { raceId } });
-        if (!unRace) {
+        const race = await Race.findOne({ where: { raceId } });
+        if (!race) {
             return res.status(404).json({ error: 'Race not found' });
         }
-        await unRace.destroy();
+        await race.destroy();
         res.json('Race deleted');
     } catch (error) {
         console.error(error);
@@ -341,11 +341,11 @@ app.get('/comments', async (req, res) => {
 app.get('/comments/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const unComment = await Comment.findByPk(id);
-        if (unComment === null) {
+        const comment = await Comment.findByPk(id);
+        if (comment === null) {
             res.status(404).json({ error: `No comment found with ID ${id}.` });
         } else {
-            res.json(unComment);
+            res.json(comment);
         }
     } catch (error) {
         console.error(error);
@@ -356,8 +356,8 @@ app.get('/comments/:id', async (req, res) => {
 // Post new comment
 app.post('/comments', async (req, res) => {
     try {
-        const unComment = await Comment.build(req.body)
-        await unComment.validate()
+        const comment = await Comment.build(req.body)
+        await comment.validate()
         const validatedComment = await Comment.create(req.body)
         res.json({ id: validatedComment.id })
     } catch (error) {
@@ -369,10 +369,10 @@ app.post('/comments', async (req, res) => {
 // Edit comment
 app.patch('/comments/:id', async (req, res) => {
     const { id } = req.params;
-    const unComment = req.body;
+    const comment = req.body;
     try {
         const [, affectedRows] = await Comment.update(
-            unComment,
+            comment,
             { where: { id } }
         );
         if (affectedRows === 0) {
@@ -390,11 +390,11 @@ app.patch('/comments/:id', async (req, res) => {
 app.delete('/comments/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const unComment = await Comment.findOne({ where: { id } });
-        if (!unComment) {
+        const comment = await Comment.findOne({ where: { id } });
+        if (!comment) {
             return res.status(404).json({ error: 'Comment not found' });
         }
-        await unComment.destroy();
+        await comment.destroy();
         res.json('Comment deleted');
     } catch (error) {
         console.error(error);
@@ -419,11 +419,11 @@ app.get('/reviews', async (req, res) => {
 app.get('/reviews/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const unReview = await Review.findByPk(id);
-        if (unReview === null) {
+        const review = await Review.findByPk(id);
+        if (review === null) {
             res.status(404).json({ error: `No review found with ID  ${id}.` });
         } else {
-            res.json(unReview);
+            res.json(review);
         }
     } catch (error) {
         console.error(error);
@@ -434,8 +434,8 @@ app.get('/reviews/:id', async (req, res) => {
 // Post new review
 app.post('/reviews', async (req, res) => {
     try {
-        const unReview = await Review.build(req.body)
-        await unReview.validate()
+        const review = await Review.build(req.body)
+        await review.validate()
         const validatedReview = await Review.create(req.body)
         res.json({ id: validatedReview.id })
     } catch (error) {
@@ -447,10 +447,10 @@ app.post('/reviews', async (req, res) => {
 // Edit review
 app.patch('/reviews/:id', async (req, res) => {
     const { id } = req.params;
-    const unReview = req.body;
+    const review = req.body;
     try {
         const [, affectedRows] = await Review.update(
-            unReview,
+            review,
             { where: { id } }
         );
         if (affectedRows === 0) {
@@ -468,11 +468,11 @@ app.patch('/reviews/:id', async (req, res) => {
 app.delete('/reviews/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const unReview = await Review.findOne({ where: { id } });
-        if (!unReview) {
+        const review = await Review.findOne({ where: { id } });
+        if (!review) {
             return res.status(404).json({ error: 'Review not found' });
         }
-        await unReview.destroy();
+        await review.destroy();
         res.json('Review deleted');
     } catch (error) {
         console.error(error);
