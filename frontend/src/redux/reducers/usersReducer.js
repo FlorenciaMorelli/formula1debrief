@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/users`;
+const API_URL = `${process.env.REACT_APP_API_URL}/api/users`;
 
 // List all users
 export const listUsers = createAsyncThunk('/users', async () => {

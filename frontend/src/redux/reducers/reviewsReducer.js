@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/reviews`;
+const API_URL = `${process.env.REACT_APP_API_URL}/api/reviews`;
 
 // List all reviews
 export const listReviews = createAsyncThunk('/reviews', async () => {
