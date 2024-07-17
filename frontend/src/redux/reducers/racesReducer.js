@@ -1,15 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/races`;
+
 // List all races
 export const listRaces = createAsyncThunk('/races', async () => {
-    const response = await axios.get('http://localhost:3001/api/races');
+    const response = await axios.get(API_URL);
     return response.data;
 });
 
 export const addRace = createAsyncThunk('/races', async () => {
-    const response = await axios.get('http://localhost:3001/api/races');
-    return response.data;
+    console.log("TODO: axios.post(URL_API, race)");
 });
 
 // TODO: raceDetails, saveRace, deleteRace ...
