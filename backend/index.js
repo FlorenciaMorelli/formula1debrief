@@ -171,7 +171,7 @@ app.get('/', (req, res) => {
 
 /* USERS */
 // Obtain all users
-app.get('/users', async (req, res) => {
+app.get('/api/users', async (req, res) => {
     try {
         const users = await User.findAll();
         res.json(users);
@@ -182,7 +182,7 @@ app.get('/users', async (req, res) => {
 });
 
 // Obtain user by ID
-app.get('/users/:id', async (req, res) => {
+app.get('/api/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const user = await User.findByPk(id);
@@ -198,7 +198,7 @@ app.get('/users/:id', async (req, res) => {
 });
 
 // Post new user
-app.post('/users', async (req, res) => {
+app.post('/api/users', async (req, res) => {
     try {
         const user = await User.build(req.body)
         await user.validate()
@@ -211,7 +211,7 @@ app.post('/users', async (req, res) => {
 });
 
 // Edit user
-app.patch('/users/:id', async (req, res) => {
+app.patch('/api/users/:id', async (req, res) => {
     const { id } = req.params;
     const user = req.body;
     try {
@@ -231,7 +231,7 @@ app.patch('/users/:id', async (req, res) => {
 });
 
 // Delete user
-app.delete('/users/:id', async (req, res) => {
+app.delete('/api/users/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const user = await User.findOne({ where: { id } });
@@ -249,7 +249,7 @@ app.delete('/users/:id', async (req, res) => {
 
 /* RACES */
 // Get races
-app.get('/races', async (req, res) => {
+app.get('/api/races', async (req, res) => {
     try {
         const races = await Race.findAll();
         res.json(races);
@@ -260,7 +260,7 @@ app.get('/races', async (req, res) => {
 });
 
 // Obtain race by ID
-app.get('/races/:id', async (req, res) => {
+app.get('/api/races/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const race = await Race.findByPk(id);
@@ -276,7 +276,7 @@ app.get('/races/:id', async (req, res) => {
 });
 
 // Post new race
-app.post('/races', async (req, res) => {
+app.post('/api/races', async (req, res) => {
     try {
         const race = await Race.build(req.body)
         await race.validate()
@@ -289,7 +289,7 @@ app.post('/races', async (req, res) => {
 });
 
 // Edit race
-app.patch('/races/:raceId', async (req, res) => {
+app.patch('/api/races/:raceId', async (req, res) => {
     const { raceId } = req.params;
     const race = req.body;
     try {
@@ -309,7 +309,7 @@ app.patch('/races/:raceId', async (req, res) => {
 });
 
 // Delete race
-app.delete('/races/:raceId', async (req, res) => {
+app.delete('/api/races/:raceId', async (req, res) => {
     const { raceId } = req.params;
     try {
         const race = await Race.findOne({ where: { raceId } });
@@ -327,7 +327,7 @@ app.delete('/races/:raceId', async (req, res) => {
 
 /* COMMENTS */
 // Get comments
-app.get('/comments', async (req, res) => {
+app.get('/api/comments', async (req, res) => {
     try {
         const comments = await Comment.findAll();
         res.json(comments);
@@ -338,7 +338,7 @@ app.get('/comments', async (req, res) => {
 });
 
 // Obtain comment by ID
-app.get('/comments/:id', async (req, res) => {
+app.get('/api/comments/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const comment = await Comment.findByPk(id);
@@ -354,7 +354,7 @@ app.get('/comments/:id', async (req, res) => {
 });
 
 // Post new comment
-app.post('/comments', async (req, res) => {
+app.post('/api/comments', async (req, res) => {
     try {
         const comment = await Comment.build(req.body)
         await comment.validate()
@@ -367,7 +367,7 @@ app.post('/comments', async (req, res) => {
 });
 
 // Edit comment
-app.patch('/comments/:id', async (req, res) => {
+app.patch('/api/comments/:id', async (req, res) => {
     const { id } = req.params;
     const comment = req.body;
     try {
@@ -387,7 +387,7 @@ app.patch('/comments/:id', async (req, res) => {
 });
 
 // Delete comment
-app.delete('/comments/:id', async (req, res) => {
+app.delete('/api/comments/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const comment = await Comment.findOne({ where: { id } });
@@ -405,7 +405,7 @@ app.delete('/comments/:id', async (req, res) => {
 
 /* REVIEWS */
 // Get reviews
-app.get('/reviews', async (req, res) => {
+app.get('/api/reviews', async (req, res) => {
     try {
         const reviews = await Review.findAll();
         res.json(reviews);
@@ -416,7 +416,7 @@ app.get('/reviews', async (req, res) => {
 });
 
 // Obtain review by ID
-app.get('/reviews/:id', async (req, res) => {
+app.get('/api/reviews/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const review = await Review.findByPk(id);
@@ -432,7 +432,7 @@ app.get('/reviews/:id', async (req, res) => {
 });
 
 // Post new review
-app.post('/reviews', async (req, res) => {
+app.post('/api/reviews', async (req, res) => {
     try {
         const review = await Review.build(req.body)
         await review.validate()
@@ -445,7 +445,7 @@ app.post('/reviews', async (req, res) => {
 });
 
 // Edit review
-app.patch('/reviews/:id', async (req, res) => {
+app.patch('/api/reviews/:id', async (req, res) => {
     const { id } = req.params;
     const review = req.body;
     try {
@@ -465,7 +465,7 @@ app.patch('/reviews/:id', async (req, res) => {
 });
 
 // Delete review
-app.delete('/reviews/:id', async (req, res) => {
+app.delete('/api/reviews/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const review = await Review.findOne({ where: { id } });

@@ -3,12 +3,12 @@ import axios from "axios";
 
 // List all reviews
 export const listReviews = createAsyncThunk('/reviews', async () => {
-    const response = await axios.get('http://localhost:3001/reviews');
+    const response = await axios.get('http://localhost:3001/api/reviews');
     return response.data;
 });
 
 export const addReview = createAsyncThunk('/reviews', async () => {
-    const response = await axios.get('http://localhost:3001/reviews');
+    const response = await axios.get('http://localhost:3001/api/reviews');
     return response.data;
 });
 

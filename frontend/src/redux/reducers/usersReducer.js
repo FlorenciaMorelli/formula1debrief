@@ -3,12 +3,12 @@ import axios from "axios";
 
 // List all users
 export const listUsers = createAsyncThunk('/users', async () => {
-    const response = await axios.get('http://localhost:3001/users');
+    const response = await axios.get('http://localhost:3001/api/users');
     return response.data;
 });
 
 export const addUser = createAsyncThunk('/users', async () => {
-    const response = await axios.get('http://localhost:3001/users');
+    const response = await axios.get('http://localhost:3001/api/users');
     return response.data;
 });
 
