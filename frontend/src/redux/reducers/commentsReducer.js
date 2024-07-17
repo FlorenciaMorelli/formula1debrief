@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = `${process.env.REACT_APP_API_URL}/api/comments`;
+const API_URL = 'http://localhost:3001/api/comments';
 
 // List all comments
 export const listComments = createAsyncThunk('/comments', async () => {

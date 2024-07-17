@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = `${process.env.REACT_APP_API_URL}/api/races`;
+const API_URL = 'http://localhost:3001/api/races';
 
 // List all races
 export const listRaces = createAsyncThunk('/races', async () => {
