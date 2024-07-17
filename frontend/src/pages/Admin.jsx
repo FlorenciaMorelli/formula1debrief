@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Races from '../components/Races/Races';
-import Reviews from '../components/Reviews';
+import Reviews from '../components/Reviews/Reviews';
 import Comments from '../components/Comments';
 import Users from '../components/Users';
 

@@ -1,5 +1,3 @@
-// RaceForm.jsx
-
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addRace } from '../../redux/reducers/racesReducer';

@@ -5,47 +5,50 @@ import axios from "axios";
 export const listReviews = createAsyncThunk('/reviews', async () => {
     const response = await axios.get('http://localhost:3001/reviews');
     return response.data;
-})
+});
+
+export const addReview = createAsyncThunk('/reviews', async () => {
+    const response = await axios.get('http://localhost:3001/reviews');
+    return response.data;
+});
 
 // TODO: reviewDetails, saveReview, deleteReview ...
 
 const reviewsSlice = createSlice({
     name: 'reviews',
     initialState: {
-        reviews: {
-            data: [],
-            status: 'idle',
-            error: null,
-            editingId: null,
-            editingObj: null
-        }
+        data: [],
+        status: 'idle',
+        error: null,
+        editingId: null,
+        editingObj: null
     },
     reducers: {
         editReview: (state, action) => {
-            state.reviews.editingId = action.payload;
+            state.editingId = action.payload;
         },
         resetReview: (state, action) => {
-            state.reviews.editingId = null;
-            state.reviews.editingObj = null;
+            state.editingId = null;
+            state.editingObj = null;
         }
     },
     extraReducers: (builder) => {
         builder
             // ListReviews
             .addCase(listReviews.pending, (state) => {
-                state.reviews.status = 'loading';
-                state.reviews.error = null;
+                state.status = 'loading';
+                state.error = null;
             })
             .addCase(listReviews.fulfilled, (state, action) => {
-                state.reviews.status = 'succeeded';
-                state.reviews.data = action.payload;
-                state.reviews.error = null;
+                state.status = 'succeeded';
+                state.data = action.payload;
+                state.error = null;
             })
             .addCase(listReviews.rejected, (state, action) => {
-                state.reviews.status = 'failed';
-                state.reviews.error = action.error.message;
+                state.status = 'failed';
+                state.error = action.error.message;
             })
-            // TODO: reviewDetails, saveReview, deleteReview ...
+        // TODO: reviewDetails, saveReview, deleteReview ...
     }
 })
 
