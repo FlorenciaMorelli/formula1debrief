@@ -1,10 +1,10 @@
 // Admin.jsx
 
 import React, { useState } from 'react';
-import Races from '../components/Races';
-import Reviews from '../components/Reviews';
-import Comments from '../components/Comments';
-import Users from '../components/Users';
+import Races from '../components/Races/Races';
+import Reviews from '../components/Reviews/Reviews';
+import Comments from '../components/Comments/Comments';
+import Users from '../components/Users/Users';
 
 const Admin = () => {
     const [activeTab, setActiveTab] = useState('races');
@@ -15,7 +15,7 @@ const Admin = () => {
 
     return (
         <div className="container mt-4">
-            <h2 className="mb-4">Admin Dashboard</h2>
+            <h1 className="mb-4">Bienvenido al administrador</h1>
             <ul className="nav nav-tabs mb-4">
                 <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'races' ? 'active' : ''}`} onClick={() => handleTabChange('races')}>
