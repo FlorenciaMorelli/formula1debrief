@@ -3,12 +3,12 @@ import axios from "axios";
 
 // List all races
 export const listRaces = createAsyncThunk('/races', async () => {
-    const response = await axios.get('http://localhost:3001/api/races');
+    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/races`);
     return response.data;
 });
 
 export const addRace = createAsyncThunk('/races', async () => {
-    const response = await axios.get('http://localhost:3001/api/races');
+    const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/races`);
     return response.data;
 });
 
