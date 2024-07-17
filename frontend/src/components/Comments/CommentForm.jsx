@@ -1,21 +1,19 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addReview } from '../../redux/reducers/reviewsReducer';
+import { addComment } from '../../redux/reducers/commentsReducer';
 
-const ReviewForm = () => {
+const CommentForm = () => {
     const dispatch = useDispatch();
-    const [race, setRace] = useState('');
+    const [review, setReview] = useState('');
     const [user, setUser] = useState('');
-    const [rating, setRating] = useState('');
     const [comment, setComment] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(addReview({ race, user, rating, comment }));
+        dispatch(addComment({ review, user, comment }));
         // Clear form after submission
         setUser('');
-        setRace('');
-        setRating('');
+        setReview('');
         setComment('');
     };
 
@@ -23,13 +21,13 @@ const ReviewForm = () => {
         <div>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label htmlFor="race" className="form-label">Carrera</label>
+                    <label htmlFor="review" className="form-label">Reseña</label>
                     <input
                         type="text"
                         className="form-control"
-                        id="race"
-                        value={race}
-                        onChange={(e) => setRace(e.target.value)}
+                        id="review"
+                        value={review}
+                        onChange={(e) => setReview(e.target.value)}
                         required
                     />
                 </div>
@@ -45,17 +43,6 @@ const ReviewForm = () => {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="rating" className="form-label">Puntuación</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="rating"
-                        value={rating}
-                        onChange={(e) => setRating(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
                     <label htmlFor="comment" className="form-label">Comentario</label>
                     <input
                         type="text"
@@ -66,10 +53,10 @@ const ReviewForm = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Add Review</button>
+                <button type="submit" className="btn btn-primary">Add Comment</button>
             </form>
         </div>
     );
 };
 
-export default ReviewForm;
+export default CommentForm;

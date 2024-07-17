@@ -21,10 +21,9 @@ const RaceForm = () => {
 
     return (
         <div>
-            <h2>Add Race</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label htmlFor="raceName" className="form-label">Race Name</label>
+                    <label htmlFor="raceName" className="form-label">Nombre de la carrera</label>
                     <input
                         type="text"
                         className="form-control"
@@ -35,7 +34,7 @@ const RaceForm = () => {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="circuit" className="form-label">Circuit</label>
+                    <label htmlFor="circuit" className="form-label">Circuito</label>
                     <input
                         type="text"
                         className="form-control"
@@ -46,7 +45,7 @@ const RaceForm = () => {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="date" className="form-label">Date</label>
+                    <label htmlFor="date" className="form-label">Fecha</label>
                     <input
                         type="date"
                         className="form-control"
@@ -57,7 +56,7 @@ const RaceForm = () => {
                     />
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="time" className="form-label">Time</label>
+                    <label htmlFor="time" className="form-label">Horario</label>
                     <input
                         type="time"
                         className="form-control"

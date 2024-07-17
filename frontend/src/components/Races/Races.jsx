@@ -20,16 +20,16 @@ const Races = () => {
 
     return (
         <div>
-            <h1>Listado de Carreras</h1>
+            <h2>Listado de Carreras</h2>
             <Button variant="primary" onClick={handleShowCreateModal}>
-                Crear Nuevo
+                CREAR CARRERA
             </Button>
             <div className="table-responsive">
                 <table className="table">
                     <thead className="thead-dark">
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Nombre</th>
+                            <th scope="col">Nombre de la carrera</th>
                             <th scope="col">Circuito</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Horario</th>
@@ -57,7 +57,7 @@ const Races = () => {
             {/* Modal para crear nueva carrera */}
             <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Crear Nueva Carrera</Modal.Title>
+                    <Modal.Title>Crear nueva carrera</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <RaceForm handleCloseModal={handleCloseCreateModal} />

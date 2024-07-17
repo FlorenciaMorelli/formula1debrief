@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { listReviews } from '../../redux/reducers/reviewsReducer.js';
-import ReviewForm from './ReviewForm.jsx';
+import { listUsers } from '../../redux/reducers/usersReducer.js';
+import UserForm from './UserForm.jsx';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 
-const Reviews = () => {
-    const reviews = useSelector((state) => state.reviews.data);
+const Users = () => {
+    const users = useSelector((state) => state.users.data);
     const dispatch = useDispatch();
     const [showCreateModal, setShowCreateModal] = useState(false);
 
     useEffect(() => {
-        dispatch(listReviews());
+        dispatch(listUsers());
     }, [dispatch]);
 
     const handleShowCreateModal = () => setShowCreateModal(true);
@@ -20,29 +20,30 @@ const Reviews = () => {
 
     return (
         <div>
-            <h2>Listado de Reseñas</h2>
+            <h2>Listado de Usuarios</h2>
             <Button variant="primary" onClick={handleShowCreateModal}>
-                CREAR RESEÑA
+                CREAR USUARIO
             </Button>
             <div className="table-responsive">
                 <table className="table">
                     <thead className="thead-dark">
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Carrera</th>
-                            <th scope="col">Usuario</th>
-                            <th scope="col">Puntuación</th>
-                            <th scope="col">Comentario</th>
+                            <th scope="col">Nombre de usuario</th>
+                            <th scope="col">correo electrónico</th>
+                            <th scope="col">Contraseña</th>
+                            <th scope="col">Rol</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody className="table-group-divider">
-                        {reviews && reviews.map((review) => (
-                            <tr key={review.id}>
-                                <th scope="row">{review.id}</th>
-                                <td>{review.raceId}</td>
-                                <td>{review.userId}</td>
-                                <td>{review.rating} / 5</td>
-                                <td>{review.comment}</td>
+                        {users && users.map((user) => (
+                            <tr key={user.id}>
+                                <th scope="row">{user.id}</th>
+                                <td>{user.username}</td>
+                                <td>{user.email}</td>
+                                <td>{user.password}</td>
+                                <td>{user.role}</td>
                                 <td>
                                     <button type="button" className="btn btn-primary mx-1">Editar</button>
                                     <button type="button" className="btn btn-danger mx-1">Eliminar</button>
@@ -53,17 +54,17 @@ const Reviews = () => {
                 </table>
             </div>
 
-            {/* Modal para crear nueva reseña */}
+            {/* Modal para crear nuevo usuario */}
             <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Crear nueva reseña</Modal.Title>
+                    <Modal.Title>Crear nuevo usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ReviewForm handleCloseModal={handleCloseCreateModal} />
+                    <UserForm handleCloseModal={handleCloseCreateModal} />
                 </Modal.Body>
             </Modal>
         </div>
     );
 };
 
-export default Reviews;
+export default Users;
