@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { listRaces } from '../redux/reducers/racesReducer';
+import { listRaces } from '../../redux/reducers/racesReducer.js';
 import RaceForm from './RaceForm.jsx';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -25,7 +25,7 @@ const Races = () => {
                 Crear Nuevo
             </Button>
             <div className="table-responsive">
-                <table class="table">
+                <table className="table">
                     <thead className="thead-dark">
                         <tr>
                             <th scope="col">ID</th>
@@ -36,7 +36,7 @@ const Races = () => {
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody class="table-group-divider">
+                    <tbody className="table-group-divider">
                         {races && races.map((race) => (
                             <tr key={race.raceId}>
                                 <th scope="row">{race.raceId}</th>
