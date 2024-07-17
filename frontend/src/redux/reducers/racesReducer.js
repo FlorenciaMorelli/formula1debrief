@@ -10,8 +10,7 @@ export const listRaces = createAsyncThunk('/races', async () => {
 });
 
 export const addRace = createAsyncThunk('/races', async () => {
-    const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/races`);
-    return response.data;
+    console.log("TODO: axios.post(URL_API, race)");
 });
 
 // TODO: raceDetails, saveRace, deleteRace ...

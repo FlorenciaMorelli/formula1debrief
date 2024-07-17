@@ -1,15 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = `${process.env.REACT_APP_BACKEND_URL}/api/users`;
+
 // List all users
 export const listUsers = createAsyncThunk('/users', async () => {
-    const response = await axios.get('http://localhost:3001/api/users');
+    const response = await axios.get(API_URL);
     return response.data;
 });
 
 export const addUser = createAsyncThunk('/users', async () => {
-    const response = await axios.get('http://localhost:3001/api/users');
-    return response.data;
+    console.log("TODO: axios.post(URL_API, user)");
 });
 
 // TODO: userDetails, saveUser, deleteUser ...
