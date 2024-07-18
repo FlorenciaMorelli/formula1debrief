@@ -12,6 +12,9 @@ node_modules/
 dist/
 build/
 
+# Database
+formula1debrief.db
+
 # Environment variables
 .env
 .env.local
