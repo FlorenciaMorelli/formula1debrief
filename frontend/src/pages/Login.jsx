@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import SignIn from '../components/SignIn/SignIn'
 import SignUp from '../components/SignUp/SignUp';
-import Button from 'react-bootstrap/esm/Button'
 
 function Login() {
   const [activeLog, setActiveLog] = useState('signin');
