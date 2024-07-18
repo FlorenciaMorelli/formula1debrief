@@ -47,7 +47,7 @@ const Comments = () => {
     return (
         <div>
             <h2>Listado de Comentarios</h2>
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button class="btn btn-outline-success" onClick={handleShowCreateModal}>
                 CREAR COMENTARIO
             </Button>
             <div className="table-responsive">
@@ -80,7 +80,7 @@ const Comments = () => {
                                 }
                                 <td>{comment.comment}</td>
                                 <td>
-                                <button type="button" className="btn btn-primary mx-1" onClick={() => handleShowEditModal(comment.id)}>Editar</button>
+                                <button type="button" class="btn btn-warning mx-1" onClick={() => handleShowEditModal(comment.id)}>Editar</button>
                                 <button type="button" className="btn btn-danger mx-1" onClick={() => handleDelete(comment.id)}>Eliminar</button>
                                 </td>
                             </tr>

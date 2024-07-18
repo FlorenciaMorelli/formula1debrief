@@ -42,7 +42,7 @@ const Races = () => {
     return (
         <div>
             <h2>Listado de Carreras</h2>
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button class="btn btn-outline-success" onClick={handleShowCreateModal}>
                 CREAR CARRERA
             </Button>
             <div className="table-responsive">
@@ -66,7 +66,7 @@ const Races = () => {
                                 <td>{race.date}</td>
                                 <td>{race.time}</td>
                                 <td>
-                                    <button type="button" className="btn btn-primary mx-1" onClick={() => handleShowEditModal(race.raceId)}>Editar</button>
+                                    <button type="button" class="btn btn-warning mx-1" onClick={() => handleShowEditModal(race.raceId)}>Editar</button>
                                     <button type="button" className="btn btn-danger mx-1" onClick={() => handleDelete(race.raceId)}>Eliminar</button>
                                 </td>
                             </tr>

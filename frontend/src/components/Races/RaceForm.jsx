@@ -89,7 +89,8 @@ const RaceForm = ({ raceId, handleCloseModal }) => {
                 />
                 <div className="invalid-feedback">{errors.time?.message}</div>
             </div>
-            <button type="submit" className="btn btn-primary">Guardar</button>
+            <br />
+            <button type="submit" class="btn btn-success">Guardar</button>
         </form>
     );
 };

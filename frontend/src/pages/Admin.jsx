@@ -19,22 +19,22 @@ const Admin = () => {
             <ul className="nav nav-tabs mb-4">
                 <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'races' ? 'active' : ''}`} onClick={() => handleTabChange('races')}>
-                        Races
+                        Carreras
                     </button>
                 </li>
                 <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => handleTabChange('reviews')}>
-                        Reviews
+                        Reseñas
                     </button>
                 </li>
                 <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'comments' ? 'active' : ''}`} onClick={() => handleTabChange('comments')}>
-                        Comments
+                        Comentarios
                     </button>
                 </li>
                 <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'users' ? 'active' : ''}`} onClick={() => handleTabChange('users')}>
-                        Users
+                        Usuarios
                     </button>
                 </li>
             </ul>

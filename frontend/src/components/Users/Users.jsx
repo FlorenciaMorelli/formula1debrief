@@ -42,7 +42,7 @@ const Users = () => {
     return (
         <div>
             <h2>Listado de Usuarios</h2>
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button class="btn btn-outline-success" onClick={handleShowCreateModal}>
                 CREAR USUARIO
             </Button>
             <div className="table-responsive">
@@ -66,7 +66,7 @@ const Users = () => {
                                 <td>{user.password}</td>
                                 <td>{user.role}</td>
                                 <td>
-                                    <button type="button" className="btn btn-primary mx-1" onClick={() => handleShowEditModal(user.id)}>Editar</button>
+                                    <button type="button" class="btn btn-warning mx-1" onClick={() => handleShowEditModal(user.id)}>Editar</button>
                                     <button type="button" className="btn btn-danger mx-1" onClick={() => handleDelete(user.id)}>Eliminar</button>
                                 </td>
                             </tr>
