@@ -146,12 +146,15 @@ h1{
   }
 
   .footerDiv{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: .5rem;
-    align-items: center;
     margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: .3rem;
+    
+    span{
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
 }
 
