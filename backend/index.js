@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const bodyParser = require('body-parser');
 const { Sequelize, DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt");
 
 // Create sequelize instance
 const sequelize = new Sequelize({
@@ -200,10 +201,15 @@ app.get('/api/users/:id', async (req, res) => {
 // Post new user
 app.post('/api/users', async (req, res) => {
     try {
-        const user = await User.build(req.body)
-        await user.validate()
-        const validatedUser = await User.create(req.body)
-        res.json({ id: validatedUser.id })
+        const { username, email, password, role } = req.body;
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({
+            username: username,
+            email: email,
+            password: hashedPassword,
+            role: role
+        });
+        res.json({ id: user.id });
     } catch (error) {
         console.error(error);
         res.status(409).json({ error: error });
@@ -480,6 +486,29 @@ app.delete('/api/reviews/:id', async (req, res) => {
     }
 });
 
+/* Authentication */
+
+// Login
+app.post('/auth/login', async (req, res) =>{
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ where: { email } }); // Search for an user with that email
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid credentials' }); // If the user doesn't exist, it returns a 401 error
+        }
+        // Bcrypt lets us compare the two by hashing the password we're reciving and comparing it to the hash we have in our table
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+        res.json("YOU LOGGED IN");
+        /* const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+        res.json({ token }); */
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+})
 
 
 /* DATABASE */
@@ -491,8 +520,8 @@ async function populateDatabase() {
 
     if (userCount === 0 && raceCount === 0 && reviewCount === 0 && commentCount === 0) {
         const users = [
-            { username: "user1", email: "user1@example.com", password: "password1" },
-            { username: "user2", email: "user2@example.com", password: "password2" }
+            { username: "user1", email: "user1@example.com", password: (await bcrypt.hash("password1", 10)).toString() },
+            { username: "user2", email: "user2@example.com", password: (await bcrypt.hash("password2", 10)).toString() }
         ];
 
         const races = [
