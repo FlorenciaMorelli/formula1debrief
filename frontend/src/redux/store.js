@@ -6,11 +6,11 @@ import usersReducer from './reducers/usersReducer';
 import authSlice from './reducers/authSlice';
 
 const rootReducer = combineReducers({
+    auth: authSlice,
     races: racesReducer,
     reviews: reviewsReducer,
     comments: commentsReducer,
     users: usersReducer,
-    auth: authSlice
 });
 
 const store = configureStore({
