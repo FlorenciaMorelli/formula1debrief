@@ -1,74 +1,96 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addRace } from '../../redux/reducers/racesReducer';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { createRace, updateRace, readOneRace, readRaces } from '../../redux/reducers/racesReducer';
 
-const RaceForm = () => {
+const raceSchema = Yup.object().shape({
+    raceName: Yup.string().required('Nombre de la carrera es requerido'),
+    circuit: Yup.string().required('Circuito es requerido'),
+    date: Yup.string().required('Fecha es requerida'),
+    time: Yup.string().required('Horario es requerido'),
+});
+
+const RaceForm = ({ raceId, handleCloseModal }) => {
     const dispatch = useDispatch();
-    const [raceName, setRaceName] = useState('');
-    const [circuit, setCircuit] = useState('');
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
+    const { control, handleSubmit, setValue, reset, formState: { errors } } = useForm({
+        resolver: yupResolver(raceSchema)
+    });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        dispatch(addRace({ raceName, circuit, date, time }));
-        // Clear form after submission
-        setRaceName('');
-        setCircuit('');
-        setDate('');
-        setTime('');
+    const editingObj = useSelector((state) => state.races.editingObj);
+
+    useEffect(() => {
+        if (raceId) {
+            dispatch(readOneRace(raceId));
+        } else {
+            reset(); // Restablecer el formulario al crear una nueva carrera
+        }
+    }, [dispatch, raceId, reset]);
+
+    useEffect(() => {
+        if (editingObj) {
+            setValue('raceName', editingObj.raceName);
+            setValue('circuit', editingObj.circuit);
+            setValue('date', editingObj.date);
+            setValue('time', editingObj.time);
+        }
+    }, [editingObj, setValue]);
+
+    const onSubmit = (data) => {
+        if (raceId) {
+            dispatch(updateRace({ ...data, raceId })).then(() => {
+                handleCloseModal();
+                dispatch(readRaces());
+            });
+        } else {
+            dispatch(createRace(data)).then(() => {
+                handleCloseModal();
+                dispatch(readRaces());
+            });
+        }
     };
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="raceName" className="form-label">Nombre de la carrera</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="raceName"
-                        value={raceName}
-                        onChange={(e) => setRaceName(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="circuit" className="form-label">Circuito</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="circuit"
-                        value={circuit}
-                        onChange={(e) => setCircuit(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="date" className="form-label">Fecha</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        id="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="time" className="form-label">Horario</label>
-                    <input
-                        type="time"
-                        className="form-control"
-                        id="time"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary">Add Race</button>
-            </form>
-        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="form-group">
+                <label>Nombre de la carrera</label>
+                <Controller
+                    control={control}
+                    name="raceName"
+                    render={({ field }) => <input type="text" className={`form-control ${errors.raceName ? 'is-invalid' : ''}`} {...field} />}
+                />
+                <div className="invalid-feedback">{errors.raceName?.message}</div>
+            </div>
+            <div className="form-group">
+                <label>Circuito</label>
+                <Controller
+                    control={control}
+                    name="circuit"
+                    render={({ field }) => <input type="text" className={`form-control ${errors.circuit ? 'is-invalid' : ''}`} {...field} />}
+                />
+                <div className="invalid-feedback">{errors.circuit?.message}</div>
+            </div>
+            <div className="form-group">
+                <label>Fecha</label>
+                <Controller
+                    control={control}
+                    name="date"
+                    render={({ field }) => <input type="date" className={`form-control ${errors.date ? 'is-invalid' : ''}`} {...field} />}
+                />
+                <div className="invalid-feedback">{errors.date?.message}</div>
+            </div>
+            <div className="form-group">
+                <label>Horario</label>
+                <Controller
+                    control={control}
+                    name="time"
+                    render={({ field }) => <input type="time" className={`form-control ${errors.time ? 'is-invalid' : ''}`} {...field} />}
+                />
+                <div className="invalid-feedback">{errors.time?.message}</div>
+            </div>
+            <button type="submit" className="btn btn-primary">Guardar</button>
+        </form>
     );
 };
 
