@@ -24,6 +24,8 @@ h1{
 }
 
 .principal{
+  max-width: 80%;
+  margin: auto;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -32,11 +34,30 @@ h1{
 
 }
 
+.searchRaces{
+  width: 70%;
+  padding: 0.5rem 1rem;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  border: 1px solid var(--carbon-black-50) !important;
+  border-radius: 0.5rem;
+  background-color: var(--carbon-black-30) !important;
+  color: var(--off-white);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus {
+    background-color: var(--carbon-black-50);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    outline: none;
+  }
+}
+
 .raceCard{
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
   max-width: 80%;
-  margin: 0 auto;
+  margin: 2rem auto;
 
   color: var(--off-white) !important;
   background: var(--carbon-black) !important;
@@ -52,5 +73,45 @@ h1{
     margin: -0.3rem; /* !importanté */
     border-radius: inherit; /* !importanté */
     background: linear-gradient(to right, grey, black);
+  }
+
+  .card-header{
+    background-color: transparent !important;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: first baseline;
+
+    .circuit{
+      font-size: 0.8rem;
+    }
+
+    .rating{
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: right;
+      font-size: 1.8rem;
+      gap: 0.3rem;
+      
+      svg{
+        font-size: 1.6rem;
+      }
+    }
+  }
+
+  .card-body{
+    margin: 3rem;
+    
+    .card-title{
+      font-size: 2.5rem;
+      color: var(--off-white) !important;
+    }
+
+    .date{
+      font-size: 1rem;
+
+    }
   }
 }

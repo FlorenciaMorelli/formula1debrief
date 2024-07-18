@@ -1,44 +1,51 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { readRaces } from '../../redux/reducers/racesReducer';
 import RaceCard from './RaceCard';
 
 function LatestRaces() {
-    const races = useSelector((state) => state.races.data);
     const dispatch = useDispatch();
+    const races = useSelector((state) => state.races.data);
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-
+    const [filteredRaces, setFilteredRaces] = useState([]);
 
     useEffect(() => {
         dispatch(readRaces());
     }, [dispatch]);
 
-    const handleSearch = (event) => {
-        const value = event.target.value;
-        setSearchTerm(value);
-
-        const results = races.filter((race) =>
-            race.raceName.toLowerCase().includes(value.toLowerCase())
+    useEffect(() => {
+        setFilteredRaces(
+            races
+                .slice()
+                .reverse()
+                .filter(race =>
+                    race.raceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    race.circuit.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    race.date.toLowerCase().includes(searchTerm.toLowerCase())
+                )
         );
-        setSearchResults(results);
-    };
+    }, [searchTerm, races]);
 
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value);
+    };
 
     return (
         <div>
-            {
-                races.map((race) => {
-                    return (
-                        <>
-                            <RaceCard race={race} />
-                            <br />
-                        </>
-                    );
-                })
-            }
+            <input
+                type="text"
+                className='searchRaces'
+                placeholder="Busca carreras..."
+                value={searchTerm}
+                onChange={handleSearch}
+            />
+            <ul>
+                {filteredRaces.map(race => (
+                    <RaceCard key={race.id} race={race} />
+                ))}
+            </ul>
         </div>
-    )
+    );
 }
 
-export default LatestRaces
+export default LatestRaces;

@@ -6,7 +6,7 @@ function Principal() {
         <div className="principal">
             <div>
                 <h1>Welcome Back</h1>
-                <p>Check out everyone's opinion about the last races</p>
+                <p>Check out the opinions about the last Formula 1® races</p>
             </div>
             <LatestRaces />
         </div>
