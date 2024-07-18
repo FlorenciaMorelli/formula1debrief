@@ -4,6 +4,10 @@ import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import axios from "axios";
+import {useNavigate} from 'react-router-dom';
+
+const AUTH_URL = process.env.REACT_APP_AUTH_URL || 'http://localhost:3001/auth';
 
 const signInSchema = Yup.object().shape({
   email: Yup.string().email('El formato no es correcto').required('El correo electrónico es requerido'),
@@ -11,13 +15,21 @@ const signInSchema = Yup.object().shape({
 });
 
 function SignIn({ onLogin }) {
+  const navigate = useNavigate();
+
   const { register, handleSubmit } = useForm({
     resolver: yupResolver(signInSchema)
   })
 
   const onSubmit = (data) => {
-    console.log(data);
-    onLogin('user'); // Supongamos que el rol es 'user' por defecto
+    axios.post(`${AUTH_URL}/login`, data).then((response) => {
+      onLogin(response.data.role);
+      if(response.data.role === 'admin'){
+        navigate('/admin');
+      } else {
+        navigate('/home');
+      }
+    })
   };
   
   return (
@@ -35,7 +47,7 @@ function SignIn({ onLogin }) {
       </Form.Group>
 
       <div className="d-grid gap-2">
-      <Button variant="dark" type="submit">
+      <Button variant="dark" type="submit" >
         Ingresar
       </Button>
       </div>
