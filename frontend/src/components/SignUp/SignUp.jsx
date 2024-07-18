@@ -14,14 +14,19 @@ const signInSchema = Yup.object().shape({
   passwordConfirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
 });
 
-function SignUp() {
+function SignUp({ onLogin }) {
   const { register, handleSubmit } = useForm({
     resolver: yupResolver(signInSchema)
   })
+
+  const onSubmit = (data) => {
+    console.log(data);
+    onLogin('user'); // Supongamos que el rol es 'user' por defecto
+  };
   
   return (
     <div className='signIn'>
-      <Form onSubmit={handleSubmit((data) => console.log(data))}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
       
       <Form.Group className="mb-3">
         <Form.Label htmlFor='username'>Nombre de usuario</Form.Label>

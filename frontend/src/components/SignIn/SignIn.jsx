@@ -10,14 +10,19 @@ const signInSchema = Yup.object().shape({
   password: Yup.string().required('La contraseña es requerida')
 });
 
-function SignIn() {
+function SignIn({ onLogin }) {
   const { register, handleSubmit } = useForm({
     resolver: yupResolver(signInSchema)
   })
+
+  const onSubmit = (data) => {
+    console.log(data);
+    onLogin('user'); // Supongamos que el rol es 'user' por defecto
+  };
   
   return (
     <div className='signIn'>
-      <Form onSubmit={handleSubmit((data) => console.log(data))}>
+      <Form onSubmit={handleSubmit(onSubmit)}>
       
       <Form.Group className="mb-3">
         <Form.Label htmlFor='email'>Correo electrónico</Form.Label>

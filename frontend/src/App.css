@@ -23,6 +23,11 @@ h1{
   font-weight: 600;
 }
 
+.notFound{
+  text-align: center;
+  margin-top: 10vh;
+}
+
 .principal{
   max-width: 80%;
   margin: auto;
