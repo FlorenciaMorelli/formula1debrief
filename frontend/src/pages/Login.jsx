@@ -10,9 +10,9 @@ function Login() {
       </div>
       <div className='textDiv'>
         <p>
-          Bienvenido nuevamente!
+          ¡Hola otra vez!
           <br />
-          Ingresa a tu cuenta para acceder a las últimas reseñas de F1
+          Ingresá a tu cuenta para acceder a las últimas reseñas de F1
         </p>
         <SignIn />
       </div>

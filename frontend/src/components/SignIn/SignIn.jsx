@@ -11,7 +11,7 @@ const signInSchema = Yup.object().shape({
 });
 
 function SignIn() {
-  const { register, handleSubmit, formState : { isValid }} = useForm({
+  const { register, handleSubmit } = useForm({
     resolver: yupResolver(signInSchema)
   })
   
