@@ -1,3 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+:root{
+  --warm-red: #ff0000;
+  --carbon-black: #0e0719;
+  --carbon-black-90: rgba(14, 7, 25, 0.9);
+  --carbon-black-70: rgba(14, 7, 25, 0.7);
+  --carbon-black-50: rgba(14, 7, 25, 0.5);
+  --carbon-black-30: rgba(14, 7, 25, 0.3);
+  --off-white: #f8f5f0;
+  --high-vis-white: #ffffff;
+}
+
 body{
   padding: 2rem;
+  font-family: 'Titillium Web', sans-serif;
+  background-color: #0e0719 !important;
+  color: #f8f5f0 !important;
+}
+
+h1{
+  font-size: 4rem;
+  font-weight: 600;
+}
+
+.principal{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  text-align: center;
+
+}
+
+.raceCard{
+  text-align: center;
+  padding: 2rem;
+  max-width: 80%;
+  margin: 0 auto;
+
+  color: var(--off-white) !important;
+  background: var(--carbon-black) !important;
+  background-clip: padding-box !important; /* !importanté */
+  border: solid 0.3rem transparent !important; /* !importanté */
+  border-radius: 1em;
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    z-index: -1;
+    margin: -0.3rem; /* !importanté */
+    border-radius: inherit; /* !importanté */
+    background: linear-gradient(to right, grey, black);
+  }
 }
