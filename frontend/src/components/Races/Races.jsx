@@ -1,22 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { listRaces } from '../../redux/reducers/racesReducer.js';
+import { readRaces, editRace, deleteRace, resetRace } from '../../redux/reducers/racesReducer.js';
 import RaceForm from './RaceForm.jsx';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-
 
 const Races = () => {
     const races = useSelector((state) => state.races.data);
     const dispatch = useDispatch();
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [editingId, setEditingId] = useState(null);
 
     useEffect(() => {
-        dispatch(listRaces());
+        dispatch(readRaces());
     }, [dispatch]);
 
-    const handleShowCreateModal = () => setShowCreateModal(true);
-    const handleCloseCreateModal = () => setShowCreateModal(false);
+    const handleShowCreateModal = () => {
+        setEditingId(null);
+        dispatch(resetRace());
+        setShowCreateModal(true);
+    };
+
+    const handleShowEditModal = (id) => {
+        setEditingId(id);
+        dispatch(editRace({ raceId: id }));
+        setShowCreateModal(true);
+    };
+
+    const handleCloseCreateModal = () => {
+        setEditingId(null);
+        dispatch(resetRace());
+        setShowCreateModal(false);
+    };
+
+    const handleDelete = (id) => {
+        if (window.confirm('¿Estás seguro de que deseas eliminar esta carrera?')) {
+            dispatch(deleteRace(id)).then(() => dispatch(readRaces()));
+        }
+    };
 
     return (
         <div>
@@ -45,8 +66,8 @@ const Races = () => {
                                 <td>{race.date}</td>
                                 <td>{race.time}</td>
                                 <td>
-                                    <button type="button" className="btn btn-primary mx-1">Editar</button>
-                                    <button type="button" className="btn btn-danger mx-1">Eliminar</button>
+                                    <button type="button" className="btn btn-primary mx-1" onClick={() => handleShowEditModal(race.raceId)}>Editar</button>
+                                    <button type="button" className="btn btn-danger mx-1" onClick={() => handleDelete(race.raceId)}>Eliminar</button>
                                 </td>
                             </tr>
                         ))}
@@ -54,13 +75,12 @@ const Races = () => {
                 </table>
             </div>
 
-            {/* Modal para crear nueva carrera */}
             <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Crear nueva carrera</Modal.Title>
+                    <Modal.Title>{editingId ? 'Editar carrera' : 'Crear nueva carrera'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <RaceForm handleCloseModal={handleCloseCreateModal} />
+                    <RaceForm raceId={editingId} handleCloseModal={handleCloseCreateModal} />
                 </Modal.Body>
             </Modal>
         </div>

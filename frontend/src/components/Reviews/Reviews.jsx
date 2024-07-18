@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { listReviews } from '../../redux/reducers/reviewsReducer.js';
+import { deleteReview, editReview, readReviews, resetReview } from '../../redux/reducers/reviewsReducer.js';
 import ReviewForm from './ReviewForm.jsx';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -8,15 +8,40 @@ import Modal from 'react-bootstrap/Modal';
 
 const Reviews = () => {
     const reviews = useSelector((state) => state.reviews.data);
+    const races = useSelector((state) => state.races.data);
+    const users = useSelector((state) => state.users.data);
     const dispatch = useDispatch();
     const [showCreateModal, setShowCreateModal] = useState(false);
+    const [editingId, setEditingId] = useState(null);
+
 
     useEffect(() => {
-        dispatch(listReviews());
+        dispatch(readReviews());
     }, [dispatch]);
 
-    const handleShowCreateModal = () => setShowCreateModal(true);
-    const handleCloseCreateModal = () => setShowCreateModal(false);
+    const handleShowCreateModal = () => {
+        setEditingId(null);
+        dispatch(resetReview());
+        setShowCreateModal(true);
+    };
+    
+    const handleShowEditModal = (id) => {
+        setEditingId(id);
+        dispatch(editReview({ id: id }));
+        setShowCreateModal(true);
+    };
+
+    const handleCloseCreateModal = () => {
+        setEditingId(null);
+        dispatch(resetReview());
+        setShowCreateModal(false);
+    };
+
+    const handleDelete = (id) => {
+        if (window.confirm('¿Estás seguro de que deseas eliminar esta reseña?')) {
+            dispatch(deleteReview(id)).then(() => dispatch(readReviews()));
+        }
+    };
 
     return (
         <div>
@@ -39,13 +64,25 @@ const Reviews = () => {
                         {reviews && reviews.map((review) => (
                             <tr key={review.id}>
                                 <th scope="row">{review.id}</th>
-                                <td>{review.raceId}</td>
-                                <td>{review.userId}</td>
+                                {
+                                    races && races.map((race) => {
+                                        if (review.raceId === race.raceId) {
+                                            return <td>{ race.raceName }</td>
+                                        }
+                                    })
+                                }
+                                {
+                                    users && users.map((user) => {
+                                        if (review.userId === user.id) {
+                                            return <td>{ user.username }</td>
+                                        }
+                                    })
+                                }
                                 <td>{review.rating} / 5</td>
                                 <td>{review.comment}</td>
                                 <td>
-                                    <button type="button" className="btn btn-primary mx-1">Editar</button>
-                                    <button type="button" className="btn btn-danger mx-1">Eliminar</button>
+                                <button type="button" className="btn btn-primary mx-1" onClick={() => handleShowEditModal(review.id)}>Editar</button>
+                                <button type="button" className="btn btn-danger mx-1" onClick={() => handleDelete(review.id)}>Eliminar</button>
                                 </td>
                             </tr>
                         ))}
@@ -53,13 +90,12 @@ const Reviews = () => {
                 </table>
             </div>
 
-            {/* Modal para crear nueva reseña */}
             <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Crear nueva reseña</Modal.Title>
+                    <Modal.Title>{editingId ? 'Editar reseña' : 'Crear nueva reseña'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ReviewForm handleCloseModal={handleCloseCreateModal} />
+                    <ReviewForm id={editingId} handleCloseModal={handleCloseCreateModal} />
                 </Modal.Body>
             </Modal>
         </div>
