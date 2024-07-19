@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { readOneRace } from '../redux/reducers/racesReducer';
-import { readReviews, createReview, updateReview } from '../redux/reducers/reviewsReducer';
+import { readReviews, createReview, updateReview, deleteReview } from '../redux/reducers/reviewsReducer';
 import Review from '../components/RacePage/Review';
-import { BsChevronLeft, BsPencil, BsX } from 'react-icons/bs';
+import { BsChevronLeft, BsPencil, BsX, BsTrash } from 'react-icons/bs';
 import RatingStars from '../components/RacePage/RatingStars';
 
 function RacePage() {
@@ -17,6 +17,7 @@ function RacePage() {
     const [userReview, setUserReview] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [newReview, setNewReview] = useState({ rating: '', comment: '' });
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         dispatch(readOneRace(id));
@@ -51,6 +52,14 @@ function RacePage() {
                 });
             }
         }
+    };
+
+    const handleDelete = () => {
+        dispatch(deleteReview(userReview.id)).then(() => {
+            setUserReview(null);
+            dispatch(readReviews());
+        });
+        setShowDeleteConfirm(false);
     };
 
     const formatDate = (dateString) => {
@@ -108,6 +117,10 @@ function RacePage() {
                                             setIsEditing(true);
                                         }}
                                     />
+                                    <BsTrash
+                                        className="delete-icon"
+                                        onClick={() => setShowDeleteConfirm(true)}
+                                    />
                                     </div>
                                     <p className='review-text'>"{userReview.comment}"</p>
                                 </div>
@@ -139,6 +152,15 @@ function RacePage() {
                         )}
                     </div>
                 </>
+            )}
+            {showDeleteConfirm && (
+                <div className="delete-confirm-modal">
+                    <div className="delete-confirm-content">
+                        <p>¿Estás seguro de que deseas eliminar tu reseña?</p>
+                        <button onClick={handleDelete}>Sí, eliminar</button>
+                        <button onClick={() => setShowDeleteConfirm(false)}>Cancelar</button>
+                    </div>
+                </div>
             )}
         </div>
     );

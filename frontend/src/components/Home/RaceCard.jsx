@@ -17,12 +17,17 @@ function RaceCard(props) {
         dispatch(readReviews());
     }, [dispatch]);
 
-    const userReview = reviews.find(review => review.raceId === race.raceId && review.userId && currentUserID);
+    const userReview = reviews.find(review => review.raceId === race.raceId && review.userId === currentUserID);
 
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric"}
         return new Date(dateString).toLocaleDateString("es-ES", options)
     }
+
+    const filteredReviews = reviews.filter(review => review.raceId === race.raceId);
+    const averageRating = filteredReviews.length > 0 ? 
+        filteredReviews.reduce((sum, review) => sum + review.rating, 0) / filteredReviews.length : 
+        null;
 
     return (
         <Card className='raceCard' onClick={() => {
@@ -32,10 +37,12 @@ function RaceCard(props) {
                 <Card.Text className='circuit'>
                     {race.circuit}
                 </Card.Text>
-                <Card.Text className='rating'>
-                    <BsStarFill />
-                    {reviews.filter(review => review.raceId === race.raceId).reduce((sum, review) => sum + review.rating, 0) / reviews.filter(review => review.raceId === race.raceId).length}
-                </Card.Text>
+                {averageRating !== null && (
+                    <Card.Text className='rating'>
+                        <BsStarFill />
+                        {averageRating.toFixed(1)}
+                    </Card.Text>
+                )}
             </Card.Header>
             <Card.Body>
                 <div className="card-info">
@@ -56,15 +63,13 @@ function RaceCard(props) {
                     ) : (
                         <div className='user-review'>
                             <p>Aún no opinaste sobre esta carrera.</p>
-                            <Button className='btn-goreview'> Dar mi opinión</Button>
+                            <Button className='btn-goreview' onClick={() => navigate(`/race/${race.raceId}`)}> Dar mi opinión</Button>
                         </div>
                     )}
                 </div>
             </Card.Body>
         </Card>
-
-        
     );
 }
 
-export default RaceCard
+export default RaceCard;
