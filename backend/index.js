@@ -489,7 +489,7 @@ app.delete('/api/reviews/:id', async (req, res) => {
 /* Authentication */
 
 // Login
-app.post('/auth/login', async (req, res) =>{
+app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await User.findOne({ where: { email } }); // Search for an user with that email
@@ -501,7 +501,7 @@ app.post('/auth/login', async (req, res) =>{
         if (!isValid) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-        res.json({id: user.id, username: user.username, email: user.email, role: user.role});
+        res.json({ id: user.id, username: user.username, email: user.email, role: user.role });
         /* const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
         res.json({ token }); */
     } catch (error) {
@@ -538,11 +538,36 @@ async function populateDatabase() {
 
     if (userCount === 0 && raceCount === 0 && reviewCount === 0 && commentCount === 0) {
         const users = [
-            { username: "user1", email: "user1@example.com", password: (await bcrypt.hash("password1", 10)).toString() },
-            { username: "user2", email: "user2@example.com", password: (await bcrypt.hash("password2", 10)).toString() }
+            { username: "user1", email: "user1@example.com", password: (await bcrypt.hash("password1", 10)).toString(), role: 'admin' },
+            { username: "user2", email: "user2@example.com", password: (await bcrypt.hash("password2", 10)).toString(), role: 'user' },
+            { username: "john_doe", email: "john.doe@example.com", password: (await bcrypt.hash("password123", 10)).toString(), role: 'user'},
+            { username: "jane_smith", email: "jane.smith@example.com", password: (await bcrypt.hash("password456", 10)).toString(), role: 'user' },
+            { username: "michael_jones", email: "michael.jones@example.com", password: (await bcrypt.hash("password789", 10)).toString(), role: 'user' },
+            { username: "susan_lee", email: "susan.lee@example.com", password: (await bcrypt.hash("password321", 10)).toString(), role: 'user' },
+            { username: "david_clark", email: "david.clark@example.com", password: (await bcrypt.hash("password654", 10)).toString(), role: 'user' }
         ];
 
         const races = [
+            { raceName: "Bahrain Grand Prix", circuit: "Bahrain International Circuit", date: new Date("2023-03-05"), time: "15:00:00" },
+            { raceName: "Saudi Arabian Grand Prix", circuit: "Jeddah Corniche Circuit", date: new Date("2023-03-19"), time: "17:00:00" },
+            { raceName: "Australian Grand Prix", circuit: "Albert Park Circuit", date: new Date("2023-04-02"), time: "04:00:00" },
+            { raceName: "Chinese Grand Prix", circuit: "Shanghai International Circuit", date: new Date("2023-04-16"), time: "14:00:00" },
+            { raceName: "Miami Grand Prix", circuit: "Miami International Autodrome", date: new Date("2023-05-07"), time: "15:30:00" },
+            { raceName: "Monaco Grand Prix", circuit: "Circuit de Monaco", date: new Date("2023-05-28"), time: "15:00:00" },
+            { raceName: "Spanish Grand Prix", circuit: "Circuit de Barcelona-Catalunya", date: new Date("2023-06-04"), time: "15:00:00" },
+            { raceName: "Canadian Grand Prix", circuit: "Circuit Gilles Villeneuve", date: new Date("2023-06-18"), time: "20:00:00" },
+            { raceName: "British Grand Prix", circuit: "Silverstone Circuit", date: new Date("2023-07-09"), time: "15:00:00" },
+            { raceName: "Hungarian Grand Prix", circuit: "Hungaroring", date: new Date("2023-07-23"), time: "15:00:00" },
+            { raceName: "Belgian Grand Prix", circuit: "Circuit de Spa-Francorchamps", date: new Date("2023-08-27"), time: "15:00:00" },
+            { raceName: "Dutch Grand Prix", circuit: "Circuit Zandvoort", date: new Date("2023-09-03"), time: "15:00:00" },
+            { raceName: "Italian Grand Prix", circuit: "Autodromo Nazionale Monza", date: new Date("2023-09-10"), time: "15:00:00" },
+            { raceName: "Singapore Grand Prix", circuit: "Marina Bay Street Circuit", date: new Date("2023-09-17"), time: "20:00:00" },
+            { raceName: "Japanese Grand Prix", circuit: "Suzuka Circuit", date: new Date("2023-09-24"), time: "06:00:00" },
+            { raceName: "Qatar Grand Prix", circuit: "Losail International Circuit", date: new Date("2023-10-08"), time: "18:00:00" },
+            { raceName: "United States Grand Prix", circuit: "Circuit of the Americas", date: new Date("2023-10-22"), time: "14:30:00" },
+            { raceName: "Mexican Grand Prix", circuit: "Autódromo Hermanos Rodríguez", date: new Date("2023-10-29"), time: "14:00:00" },
+            { raceName: "Brazilian Grand Prix", circuit: "Autódromo José Carlos Pace", date: new Date("2023-11-05"), time: "14:00:00" },
+            { raceName: "Abu Dhabi Grand Prix", circuit: "Yas Marina Circuit", date: new Date("2023-11-26"), time: "17:00:00" },
             { raceName: "Bahrain Grand Prix", circuit: "Bahrain International Circuit", date: new Date("2024-03-03"), time: "15:00:00" },
             { raceName: "Saudi Arabian Grand Prix", circuit: "Jeddah Corniche Circuit", date: new Date("2024-03-17"), time: "17:00:00" },
             { raceName: 'Australian Grand Prix', circuit: 'Albert Park Circuit', date: new Date('2024-03-24'), time: '04:00:00' },
@@ -557,14 +582,50 @@ async function populateDatabase() {
         ];
 
         const reviews = [
-            { userId: 1, raceId: 1, rating: 5, comment: "Great race!" },
-            { userId: 2, raceId: 2, rating: 4, comment: "Exciting race!" }
-        ];
+            { userId: 1, raceId: 1, rating: 5, comment: "Fantastic race with an exciting finish!" },
+            { userId: 2, raceId: 2, rating: 4, comment: "Great atmosphere, but the race was a bit dull." },
+            { userId: 3, raceId: 3, rating: 3, comment: "Average race, nothing too special." },
+            { userId: 4, raceId: 4, rating: 5, comment: "Incredible performance by the drivers!" },
+            { userId: 5, raceId: 5, rating: 4, comment: "Nice race, but could use more overtaking." },
+            { userId: 1, raceId: 6, rating: 5, comment: "Monaco never disappoints. Brilliant race!" },
+            { userId: 2, raceId: 7, rating: 4, comment: "Good race with a few surprises." },
+            { userId: 3, raceId: 8, rating: 3, comment: "The race was okay, but the weather conditions were challenging." },
+            { userId: 4, raceId: 9, rating: 5, comment: "One of the best races of the season!" },
+            { userId: 5, raceId: 10, rating: 4, comment: "A solid race, but the track is hard to pass on." },
+            { userId: 1, raceId: 11, rating: 5, comment: "Spa is always a pleasure to watch. Great race!" },
+            { userId: 2, raceId: 12, rating: 4, comment: "The Dutch Grand Prix was quite exciting." },
+            { userId: 3, raceId: 13, rating: 3, comment: "The Italian Grand Prix was a bit underwhelming this year." },
+            { userId: 4, raceId: 14, rating: 5, comment: "Singapore under the lights is always fantastic!" },
+            { userId: 5, raceId: 15, rating: 4, comment: "A good race, but I expected more action." },
+            { userId: 1, raceId: 16, rating: 5, comment: "Amazing race at Qatar, really enjoyed it." },
+            { userId: 2, raceId: 17, rating: 4, comment: "The US Grand Prix was thrilling as always." },
+            { userId: 3, raceId: 18, rating: 5, comment: "Mexico City delivered a fantastic race!" },
+            { userId: 4, raceId: 19, rating: 4, comment: "Brazilian GP was entertaining but had some issues." },
+            { userId: 5, raceId: 20, rating: 5, comment: "Great end to the season at Abu Dhabi!" }
+        ];        
 
         const comments = [
-            { reviewId: 1, userId: 2, comment: "I agree, it was fantastic!" },
-            { reviewId: 2, userId: 1, comment: "It was good, but could be better." }
-        ];
+            { reviewId: 1, userId: 2, comment: "I agree, it was a thrilling race!" },
+            { reviewId: 2, userId: 3, comment: "I found it quite exciting, especially the second half." },
+            { reviewId: 3, userId: 1, comment: "I think you might be a bit harsh, it was quite good." },
+            { reviewId: 4, userId: 5, comment: "Definitely one of the highlights of the season!" },
+            { reviewId: 5, userId: 4, comment: "I felt the same, more overtaking would have been great." },
+            { reviewId: 6, userId: 3, comment: "Monaco's race was amazing, loved every minute!" },
+            { reviewId: 7, userId: 1, comment: "Agreed, it was a good race but not the best." },
+            { reviewId: 8, userId: 2, comment: "Weather made it hard to enjoy the race fully." },
+            { reviewId: 9, userId: 5, comment: "Best race of the season, hands down." },
+            { reviewId: 10, userId: 3, comment: "True, the track did make it difficult for overtaking." },
+            { reviewId: 11, userId: 4, comment: "Spa is always a classic, great racing action!" },
+            { reviewId: 12, userId: 2, comment: "Dutch GP had some great moments, enjoyed it." },
+            { reviewId: 13, userId: 1, comment: "I was a bit disappointed, expected more excitement." },
+            { reviewId: 14, userId: 5, comment: "Singapore under the lights is always spectacular." },
+            { reviewId: 15, userId: 2, comment: "It was good but not as action-packed as I hoped." },
+            { reviewId: 16, userId: 1, comment: "Qatar was amazing, great race overall." },
+            { reviewId: 17, userId: 3, comment: "US GP is always fun, enjoyed it a lot." },
+            { reviewId: 18, userId: 4, comment: "Mexico City provided an exciting race, well worth watching." },
+            { reviewId: 19, userId: 2, comment: "Brazilian GP had some great moments but some issues too." },
+            { reviewId: 20, userId: 1, comment: "A perfect ending to the season, loved it." }
+        ];        
 
         await User.bulkCreate(users, { validate: true });
         await Race.bulkCreate(races, { validate: true });
