@@ -10,18 +10,19 @@ function RacePage() {
     const { id } = useParams();
     const dispatch = useDispatch();
     const race = useSelector((state) => state.races.data.find(race => race.raceId === parseInt(id)));
-    const reviews = useSelector((state) => state.reviews.data.filter(review => review.raceId === parseInt(id)));
+    const reviews = useSelector((state) => state.reviews.data);
 
     useEffect(() => {
         dispatch(readOneRace(id));
         dispatch(readReviews());
     }, [dispatch, id]);
 
+    const filteredReviews = reviews.filter(review => review.raceId === parseInt(id));
+
     const formatDate = (dateString) => {
         const options = { year: "numeric", month: "long", day: "numeric" }
         return new Date(dateString).toLocaleDateString("es-ES", options)
     }
-
 
     return (
         <div className='racePage'>
@@ -39,9 +40,13 @@ function RacePage() {
                     </div>
                     <div className='reviews'>
                         <h2>Opiniones de los usuarios</h2>
-                        {reviews.map(review => (
-                            <Review key={review.id} review={review} />
-                        ))}
+                        {filteredReviews.length > 0 ? (
+                            filteredReviews.map(review => (
+                                <Review key={review.id} review={review} />
+                            ))
+                        ) : (
+                            <p>No hay opiniones disponibles.</p>
+                        )}
                     </div>
                 </>
             )}
