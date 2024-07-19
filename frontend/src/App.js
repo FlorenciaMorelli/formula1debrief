@@ -7,6 +7,7 @@ import Admin from './pages/Admin';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Landing from './pages/Landing';
+import RacePage from './pages/RacePage'
 import NotFound from './pages/NotFound';
 import { LoginProvider } from './context/LoginContext';
 
@@ -37,9 +38,8 @@ function App() {
             <Route
               path='/home'
               element={
-                <PrivateRoute role="user">
-                  <Home />
-                </PrivateRoute>
+                <Home />
+                
               }
             />
             <Route
@@ -50,6 +50,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route path='/race/:id' element={<RacePage />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </Router>
