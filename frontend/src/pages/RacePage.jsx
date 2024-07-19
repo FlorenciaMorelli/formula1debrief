@@ -5,7 +5,6 @@ import { readOneRace } from '../redux/reducers/racesReducer';
 import { readReviews, createReview } from '../redux/reducers/reviewsReducer';
 import Review from '../components/RacePage/Review';
 import { BsChevronLeft } from 'react-icons/bs';
-import { BsStarFill } from 'react-icons/bs';
 import RatingStars from '../components/RacePage/RatingStars';
 
 function RacePage() {
@@ -65,33 +64,28 @@ function RacePage() {
                         <p>{race.circuit}</p>
                     </div>
                     <div className='user-review-section'>
-                        <h2>Tu Opinión</h2>
                         {userReview ? (
                             <div className='user-review'>
                                 <div className="reviewoncard-top">
-                                    <p><strong>Tu opinión:</strong></p>
-                                    <p><BsStarFill /> {userReview.rating}</p>
+                                    <RatingStars
+                                        rating={userReview.rating}
+                                        readOnly={true}
+                                    />
                                 </div>
                                 <p className='review-text'>"{userReview.comment}"</p>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit}>
                                 <div className="review-form">
-                                    <label>
-                                        Rating:
-                                        <RatingStars
-                                            rating={newReview.rating}
-                                            onRatingChange={(rating) => setNewReview(prev => ({ ...prev, rating }))}
-                                        />
-                                    </label>
-                                    <label>
-                                        Comment:
-                                        <textarea
-                                            value={newReview.comment}
-                                            onChange={(e) => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
-                                        />
-                                    </label>
-                                    <button type="submit">Submit Review</button>
+                                    <RatingStars
+                                        rating={newReview.rating}
+                                        onRatingChange={(rating) => setNewReview(prev => ({ ...prev, rating }))}
+                                    />
+                                    <textarea
+                                        value={newReview.comment}
+                                        onChange={(e) => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
+                                    />
+                                    <button type="submit" className='btn-sendopinion'>Publicar</button>
                                 </div>
                             </form>
                         )}

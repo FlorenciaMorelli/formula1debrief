@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BsStarFill, BsStar } from 'react-icons/bs';
 
-const RatingStars = ({ rating, onRatingChange }) => {
+const RatingStars = ({ rating, onRatingChange, readOnly = false }) => {
+    const [hasClicked, setHasClicked] = useState(false);
+
     const handleMouseEnter = (index) => {
-        onRatingChange(index);
+        if (!readOnly && !hasClicked) {
+            onRatingChange(index);
+        }
+    };
+
+    const handleClick = (index) => {
+        if (!readOnly) {
+            onRatingChange(index);
+            setHasClicked(true);
+        }
     };
 
     return (
@@ -11,9 +22,8 @@ const RatingStars = ({ rating, onRatingChange }) => {
             {[1, 2, 3, 4, 5].map((index) => (
                 <span
                     key={index}
-                    onClick={() => onRatingChange(index)}
+                    onClick={() => handleClick(index)}
                     onMouseEnter={() => handleMouseEnter(index)}
-                    onMouseLeave={() => onRatingChange(rating)}
                 >
                     {index <= rating ? <BsStarFill /> : <BsStar />}
                 </span>
