@@ -8,15 +8,16 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Landing from './pages/Landing';
 import NotFound from './pages/NotFound';
+import { LoginProvider } from './context/LoginContext';
 
-function PrivateRoute({ children, role }){
+function PrivateRoute({ children, role }) {
   const auth = useSelector((state) => state.auth);
 
-  if( !auth.isAutenticated ){
+  if (!auth.isAutenticated) {
     return <Navigate to="/login" />;
   }
 
-  if( auth.role !== role ){
+  if (auth.role !== role) {
     return <Navigate to={auth.role === 'admin' ? "/admin" : "/home"} />
   }
 
@@ -25,31 +26,35 @@ function PrivateRoute({ children, role }){
 
 function App() {
   return (
-    <Provider store={store}>
-      <Router>
-        <Routes>
-          <Route index element={<Landing />} />
-          <Route path='/login' element={<Login />} />
-          <Route
-            path='/home'
-            element={
-              <PrivateRoute role="user">
-                <Home />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path='/admin'
-            element={
-              <PrivateRoute role="admin">
-                <Admin />
-              </PrivateRoute>
-            }
-          />
-          <Route path='*' element={<NotFound />} />
-        </Routes>
-      </Router>
-    </Provider>
+    <LoginProvider>
+
+
+      <Provider store={store}>
+        <Router>
+          <Routes>
+            <Route index element={<Landing />} />
+            <Route path='/login' element={<Login />} />
+            <Route
+              path='/home'
+              element={
+                <PrivateRoute role="user">
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/admin'
+              element={
+                <PrivateRoute role="admin">
+                  <Admin />
+                </PrivateRoute>
+              }
+            />
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </Router>
+      </Provider>
+    </LoginProvider>
   )
 }
 
