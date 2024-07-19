@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { BsStarFill } from "react-icons/bs";
-import { readOneUser, readUsers } from '../../redux/reducers/usersReducer';
+import { readUsers } from '../../redux/reducers/usersReducer';
 import { useSelector, useDispatch } from 'react-redux';
 
 function Review({ review }) {
