@@ -11,10 +11,7 @@ function Review({ review }) {
         dispatch(readUsers());
     }, [dispatch]);
 
-    console.log(review.id, ' users: ', users);
-
     const user = users.find(user => user.id === review.userId);
-    console.log('User find: ', user);
 
     return (
         <div className='review'>
