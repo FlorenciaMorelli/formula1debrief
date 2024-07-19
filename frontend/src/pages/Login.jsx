@@ -22,8 +22,8 @@ function Login() {
     setActiveLog(log);
   }
 
-  const handleLogin = (role) => {
-    dispatch(login({ role }));
+  const handleLogin = (user) => {
+    dispatch(login(user));
   };
 
   return (

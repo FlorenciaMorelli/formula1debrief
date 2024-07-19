@@ -7,16 +7,16 @@ import { BsStarFill } from "react-icons/bs";
 
 
 function RaceCard(props) {
-
     const race = props.race;
     const reviews = useSelector((state) => state.reviews.data);
+    const currentUserID = useSelector((state) => state.auth.id);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(readReviews());
     }, [dispatch]);
 
-    console.log(reviews);
+    const userReview = reviews.find( review => review.raceId === race.raceId && review.userId && currentUserID);
 
     return (
         <Card className='raceCard'>
@@ -25,14 +25,8 @@ function RaceCard(props) {
                 {race.circuit}
                 </Card.Text>
                 <Card.Text className='rating'>
-                    <BsStarFill /> 
-                    {
-                        reviews && reviews.map((review) => {
-                            if (race.raceId === review.raceId) {
-                                return <> { review.rating }</>
-                            }
-                        })
-                    }
+                    <BsStarFill />
+                    {reviews.filter(review => review.raceId === race.raceId).reduce((sum, review) => sum + review.rating, 0) / reviews.filter(review => review.raceId === race.raceId).length}
                 </Card.Text>
             </Card.Header>
             <Card.Body>
@@ -40,6 +34,17 @@ function RaceCard(props) {
                 <Card.Text className='date'>
                     {race.date} {race.time}
                 </Card.Text>
+                {userReview ? (
+                    <div className='user-review'>
+                        <p><strong>Tu reseña:</strong></p>
+                        <p>{userReview.comment}</p>
+                        <p><BsStarFill /> {userReview.rating}</p>
+                    </div>
+                ) : (
+                    <div className='user-review'>
+                        <p>No has opinado sobre esta carrera. <a href={`/race/${race.raceId}`}>Deja tu opinión aquí</a></p>
+                    </div>
+                )}
             </Card.Body>
         </Card>
     );

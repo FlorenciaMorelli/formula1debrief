@@ -1,12 +1,24 @@
-import React from 'react'
-import Principal from '../components/Home/Principal'
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/reducers/authSlice';
+import Principal from '../components/Home/Principal';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/');
+    };
+
     return (
         <>
+            <button onClick={handleLogout}>Cerrar sesión</button>
             <Principal />
         </>
-    )
+    );
 }
 
-export default Home
+export default Home;

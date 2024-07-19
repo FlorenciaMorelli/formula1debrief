@@ -23,7 +23,7 @@ function SignIn({ onLogin }) {
 
   const onSubmit = (data) => {
     axios.post(`${AUTH_URL}/login`, data).then((response) => {
-      onLogin(response.data.role);
+      onLogin(response.data);
       if(response.data.role === 'admin'){
         navigate('/admin');
       } else {
