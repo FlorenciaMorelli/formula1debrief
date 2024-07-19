@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { readOneRace } from '../redux/reducers/racesReducer';
-import { readReviews, createReview } from '../redux/reducers/reviewsReducer';
+import { readReviews, createReview, updateReview } from '../redux/reducers/reviewsReducer';
 import Review from '../components/RacePage/Review';
-import { BsChevronLeft } from 'react-icons/bs';
+import { BsChevronLeft, BsPencil, BsX } from 'react-icons/bs';
 import RatingStars from '../components/RacePage/RatingStars';
 
 function RacePage() {
@@ -15,6 +15,7 @@ function RacePage() {
     const currentUserID = useSelector((state) => state.auth.id);
     
     const [userReview, setUserReview] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
     const [newReview, setNewReview] = useState({ rating: '', comment: '' });
 
     useEffect(() => {
@@ -23,24 +24,32 @@ function RacePage() {
     }, [dispatch, id]);
 
     useEffect(() => {
-        const userReview = reviews.find(review => review.raceId === parseInt(id) && review.userId === currentUserID);
-        setUserReview(userReview);
+        const review = reviews.find(review => review.raceId === parseInt(id) && review.userId === currentUserID);
+        setUserReview(review);
     }, [reviews, id, currentUserID]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (newReview.rating && newReview.comment) {
-            dispatch(createReview({
-                raceId: parseInt(id),
-                userId: currentUserID,
-                ...newReview
-            })).then(() => {
-                // Clear the form after submission
-                setNewReview({ rating: '', comment: '' });
-                
-                // Fetch updated reviews after creating the review
-                dispatch(readReviews());
-            });
+            if (isEditing) {
+                dispatch(updateReview({
+                    ...userReview,
+                    ...newReview
+                })).then(() => {
+                    setNewReview({ rating: '', comment: '' });
+                    setIsEditing(false);
+                    dispatch(readReviews());
+                });
+            } else {
+                dispatch(createReview({
+                    raceId: parseInt(id),
+                    userId: currentUserID,
+                    ...newReview
+                })).then(() => {
+                    setNewReview({ rating: '', comment: '' });
+                    dispatch(readReviews());
+                });
+            }
         }
     };
 
@@ -65,15 +74,44 @@ function RacePage() {
                     </div>
                     <div className='user-review-section'>
                         {userReview ? (
-                            <div className='user-review'>
-                                <div className="reviewoncard-top">
-                                    <RatingStars
-                                        rating={userReview.rating}
-                                        readOnly={true}
+                            isEditing ? (
+                                <form onSubmit={handleSubmit}>
+                                    <div className="review-form">
+                                        <RatingStars
+                                            rating={newReview.rating}
+                                            onRatingChange={(rating) => setNewReview(prev => ({ ...prev, rating }))}
+                                        />
+                                        <textarea
+                                            value={newReview.comment}
+                                            onChange={(e) => setNewReview(prev => ({ ...prev, comment: e.target.value }))}
+                                        />
+                                        <div className="review-form-actions">
+                                            <button type="submit" className='btn-sendopinion'>Actualizar</button>
+                                            <BsX
+                                                className="cancel-icon"
+                                                onClick={() => setIsEditing(false)}
+                                            />
+                                        </div>
+                                    </div>
+                                </form>
+                            ) : (
+                                <div className='user-review'>
+                                    <div className="reviewoncard-top">
+                                        <RatingStars
+                                            rating={userReview.rating}
+                                            readOnly={true}
+                                        />
+                                        <BsPencil
+                                        className="edit-icon"
+                                        onClick={() => {
+                                            setNewReview({ rating: userReview.rating, comment: userReview.comment });
+                                            setIsEditing(true);
+                                        }}
                                     />
+                                    </div>
+                                    <p className='review-text'>"{userReview.comment}"</p>
                                 </div>
-                                <p className='review-text'>"{userReview.comment}"</p>
-                            </div>
+                            )
                         ) : (
                             <form onSubmit={handleSubmit}>
                                 <div className="review-form">

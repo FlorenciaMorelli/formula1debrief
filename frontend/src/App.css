@@ -233,9 +233,26 @@ h1 {
         font-style: italic;
       }
     }
-  }
+  } 
+}
 
-  
+.edit-icon, .cancel-icon {
+  float: right;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: #666;
+  margin-right: 10px;
+}
+
+.edit-icon:hover, .cancel-icon:hover {
+  color: #333;
+}
+
+.review-form-actions {
+  margin: 1.2rem auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .login {
@@ -330,8 +347,8 @@ h1 {
     }
 
     .btn-sendopinion{
-      width: 30%;
-      margin: 1.2rem auto;
+      width: 70%;
+      margin: auto;
       background-color: transparent;
       border: 1px solid var(--warm-red);
       color: var(--off-white);
