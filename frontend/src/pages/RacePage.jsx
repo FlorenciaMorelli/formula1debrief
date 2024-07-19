@@ -17,8 +17,10 @@ function RacePage() {
         dispatch(readReviews());
     }, [dispatch, id]);
 
-    console.log('Race: ', race);
-    console.log('Reviews: ', reviews);
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long", day: "numeric" }
+        return new Date(dateString).toLocaleDateString("es-ES", options)
+    }
 
 
     return (
@@ -30,11 +32,13 @@ function RacePage() {
 
             {race && (
                 <>
-                    <h1>{race.raceName}</h1>
-                    <p>{race.date} {race.time}</p>
-                    <p>{race.circuit}</p>
-                    <h2>Opiniones de los usuarios</h2>
+                    <div className='racepage-info'>
+                        <h1>{race.raceName}</h1>
+                        <p>{formatDate(race.date).toString()}</p>
+                        <p>{race.circuit}</p>
+                    </div>
                     <div className='reviews'>
+                        <h2>Opiniones de los usuarios</h2>
                         {reviews.map(review => (
                             <Review key={review.id} review={review} />
                         ))}
