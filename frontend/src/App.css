@@ -26,8 +26,9 @@ h1 {
 
 .gradient-text {
   background: radial-gradient(ellipse farthest-corner at center center, #FF0000 18%, #0E0719 100%);
+  background-clip: text;
   -webkit-background-clip: text;
-  -webkit-background-clip: text;
+  -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
