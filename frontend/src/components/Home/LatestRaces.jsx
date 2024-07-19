@@ -21,10 +21,15 @@ function LatestRaces() {
                 .filter(race =>
                     race.raceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     race.circuit.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    race.date.toLowerCase().includes(searchTerm.toLowerCase())
+                    formatDate(race.date).toString().toLowerCase().includes(searchTerm.toLowerCase())
                 )
         );
     }, [searchTerm, races]);
+
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long", day: "numeric"}
+        return new Date(dateString).toLocaleDateString("es-ES", options)
+    }
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value);
@@ -41,7 +46,7 @@ function LatestRaces() {
             />
             <ul>
                 {filteredRaces.map(race => (
-                    <RaceCard key={race.id} race={race} />
+                    <RaceCard key={race.raceId} race={race} />
                 ))}
             </ul>
         </div>

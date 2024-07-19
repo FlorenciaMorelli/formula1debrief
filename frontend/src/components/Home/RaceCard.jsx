@@ -3,26 +3,34 @@ import { useSelector, useDispatch } from 'react-redux';
 import { readReviews } from '../../redux/reducers/reviewsReducer';
 import Card from 'react-bootstrap/Card';
 import { BsStarFill } from "react-icons/bs";
-
-
+import { useNavigate } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
 function RaceCard(props) {
     const race = props.race;
     const reviews = useSelector((state) => state.reviews.data);
     const currentUserID = useSelector((state) => state.auth.id);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(readReviews());
     }, [dispatch]);
 
-    const userReview = reviews.find( review => review.raceId === race.raceId && review.userId && currentUserID);
+    const userReview = reviews.find(review => review.raceId === race.raceId && review.userId && currentUserID);
+
+    const formatDate = (dateString) => {
+        const options = { year: "numeric", month: "long", day: "numeric"}
+        return new Date(dateString).toLocaleDateString("es-ES", options)
+    }
 
     return (
-        <Card className='raceCard'>
+        <Card className='raceCard' onClick={() => {
+            navigate(`/race/${race.raceId}`)
+        }}>
             <Card.Header>
                 <Card.Text className='circuit'>
-                {race.circuit}
+                    {race.circuit}
                 </Card.Text>
                 <Card.Text className='rating'>
                     <BsStarFill />
@@ -30,23 +38,32 @@ function RaceCard(props) {
                 </Card.Text>
             </Card.Header>
             <Card.Body>
-                <Card.Title>{race.raceName}</Card.Title>
-                <Card.Text className='date'>
-                    {race.date} {race.time}
-                </Card.Text>
-                {userReview ? (
-                    <div className='user-review'>
-                        <p><strong>Tu reseña:</strong></p>
-                        <p>{userReview.comment}</p>
-                        <p><BsStarFill /> {userReview.rating}</p>
-                    </div>
-                ) : (
-                    <div className='user-review'>
-                        <p>No has opinado sobre esta carrera. <a href={`/race/${race.raceId}`}>Deja tu opinión aquí</a></p>
-                    </div>
-                )}
+                <div className="card-info">
+                    <Card.Title>{race.raceName}</Card.Title>
+                    <Card.Text className='date'>
+                        {formatDate(race.date).toString()}
+                    </Card.Text>
+                </div>
+                <div className="card-opinion">
+                    {userReview ? (
+                        <div className='user-review'>
+                            <div className="reviewoncard-top">
+                                <p><strong>Opinaste:</strong></p>
+                                <p><BsStarFill /> {userReview.rating}</p>
+                            </div>
+                            <p className='review-text'>"{userReview.comment}"</p>
+                        </div>
+                    ) : (
+                        <div className='user-review'>
+                            <p>Aún no opinaste sobre esta carrera.</p>
+                            <Button className='btn-goreview'> Dar mi opinión</Button>
+                        </div>
+                    )}
+                </div>
             </Card.Body>
         </Card>
+
+        
     );
 }
 

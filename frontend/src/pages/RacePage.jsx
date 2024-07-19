@@ -1,22 +1,33 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { readRace, readReviews } from '../../redux/reducers/racesReducer';
+import { Link, useParams } from 'react-router-dom';
+import { readOneRace } from '../redux/reducers/racesReducer';
+import { readReviews } from '../redux/reducers/reviewsReducer';
 import Review from '../components/RacePage/Review';
+import { BsChevronLeft } from 'react-icons/bs';
 
 function RacePage() {
     const { id } = useParams();
     const dispatch = useDispatch();
-    const race = useSelector((state) => state.races.data.find(race => race.id === parseInt(id)));
+    const race = useSelector((state) => state.races.data.find(race => race.raceId === parseInt(id)));
     const reviews = useSelector((state) => state.reviews.data.filter(review => review.raceId === parseInt(id)));
 
     useEffect(() => {
-        dispatch(readRace(id));
+        dispatch(readOneRace(id));
         dispatch(readReviews());
     }, [dispatch, id]);
 
+    console.log('Race: ', race);
+    console.log('Reviews: ', reviews);
+
+
     return (
         <div className='racePage'>
+            <Link className='link-back' to='/home'>
+                <BsChevronLeft />
+                Volver
+            </Link>
+
             {race && (
                 <>
                     <h1>{race.raceName}</h1>

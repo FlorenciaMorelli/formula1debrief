@@ -137,21 +137,10 @@ h1 {
   color: var(--off-white) !important;
   background: var(--carbon-black) !important;
   background-clip: padding-box !important;
-  border: solid 0.3rem transparent !important;
-  border-radius: 1em;
+  border: dotted 0.1rem var(--off-white) !important;
+  border-radius: 1rem !important;
 
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    margin: -0.3rem;
-    border-radius: inherit;
-    background: linear-gradient(to right, grey, black);
-  }
+  cursor: pointer;
 
   .card-header {
     background-color: transparent !important;
@@ -182,16 +171,61 @@ h1 {
   .card-body {
     margin: 3rem;
 
-    .card-title {
-      font-size: 2.5rem;
-      color: var(--off-white) !important;
-    }
+    .card-info{
+      margin-bottom: 6rem;
 
-    .date {
-      font-size: 1rem;
-      color: var(--gray); /* Color secundario */
+      .card-title {
+        font-size: 2.5rem;
+        color: var(--off-white) !important;
+      }
+  
+      .date {
+        font-size: 1rem;
+        color: var(--gray); /* Color secundario */
+      }
+    }
+    
+    .user-review{
+      width: 100%;
+      padding: 2rem;
+      height: max(300px, 100%);
+  
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  
+      border-radius: 1rem;
+      box-shadow: inset 23px 23px 69px #0a0513,
+              inset -23px -23px 69px #120920;
+  
+      .btn-goreview{
+        background-color: transparent;
+        border: 1px solid var(--warm-red);
+        color: var(--off-white);
+
+        &:hover{
+          background-color: var(--warm-red);
+          color: var(--carbon-black);
+        }
+      }
+
+      .reviewoncard-top{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .review-text{
+        font-style: italic;
+      }
     }
   }
+
+  
 }
 
 .login {
@@ -278,4 +312,9 @@ h1 {
     margin-top: 1rem;
     text-decoration: underline;
   }
+}
+
+.link-back{
+  color: var(--warm-red);
+  font-weight: 600;
 }
