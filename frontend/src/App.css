@@ -448,8 +448,30 @@ h1 {
     justify-content: space-between;
     align-items: center;
 
-    p strong{
-      color: var(--warm-red);
+    .user-opinion{
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 1rem;
+
+      p strong{
+        color: var(--warm-red);
+      }
+    }
+
+    .like-button{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      
+      p{
+        font-size: 1rem;
+
+        &:hover{
+          color: gray;
+        }
+      }
     }
   }
 
@@ -498,4 +520,21 @@ h1 {
 .link-back{
   color: var(--warm-red);
   font-weight: 600;
+}
+
+.like-button {
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: grey;
+  transition: color 0.3s;
+}
+
+.like-button:hover {
+  color: red;
+}
+
+.review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
