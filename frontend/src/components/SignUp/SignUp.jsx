@@ -31,7 +31,7 @@ function SignUp() {
       setErrorMessage('');
       setSuccessMessage('Registrado correctamente. Ya puedes iniciar sesión');
       setTimeout(() => {
-        window.location.reload();
+        navigate('/login');
       }, 2000);
     } catch (error) {
       setSuccessMessage('');
