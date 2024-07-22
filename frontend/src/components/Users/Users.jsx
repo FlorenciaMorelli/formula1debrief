@@ -75,7 +75,7 @@ const Users = () => {
                 </table>
             </div>
 
-            <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
+            <Modal id="admin-modal" show={showCreateModal} onHide={handleCloseCreateModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>{editingId ? 'Editar usuario' : 'Crear nuevo usuario'}</Modal.Title>
                 </Modal.Header>

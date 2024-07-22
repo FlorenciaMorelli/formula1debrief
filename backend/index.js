@@ -224,12 +224,17 @@ app.post('/api/users', async (req, res) => {
 // Edit user
 app.patch('/api/users/:id', async (req, res) => {
     const { id } = req.params;
-    const user = req.body;
+    const { password, ...restOfUserData } = req.body;
     try {
-        const [, affectedRows] = await User.update(
-            user,
-            { where: { id } }
-        );
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, 10);
+            restOfUserData.password = hashedPassword;
+        }
+
+        const [affectedRows] = await User.update(restOfUserData, {
+            where: { id },
+        });
+
         if (affectedRows === 0) {
             res.status(404).json({ error: `No user found with ID ${id}.` });
         } else {

@@ -88,7 +88,7 @@ const Likes = () => {
                 </table>
             </div>
 
-            <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
+            <Modal id="admin-modal" show={showCreateModal} onHide={handleCloseCreateModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>{editingId ? 'Editar like' : 'Crear nuevo like'}</Modal.Title>
                 </Modal.Header>

@@ -538,3 +538,22 @@ h1 {
   align-items: center;
   justify-content: space-between;
 }
+
+.admin-container{
+  margin: 2rem;
+  padding: 2rem;
+  background-color: var(--off-white);
+  border-radius: 1rem;
+  color: var(--carbon-black);
+
+  .btn-logout{
+    background-color: var(--warm-red);
+    color: var(--off-white);
+    border: none;
+    border-radius: 1rem;
+  }
+}
+
+#admin-modal{
+  color: var(--carbon-black);
+}

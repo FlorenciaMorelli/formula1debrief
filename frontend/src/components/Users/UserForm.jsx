@@ -85,7 +85,11 @@ const UserForm = ({ id, handleCloseModal }) => {
                 <Controller
                     control={control}
                     name="role"
-                    render={({ field }) => <input type="text" className={`form-control ${errors.role ? 'is-invalid' : ''}`} {...field} />}
+                    render={({ field }) => <select className={`form-control form-select ${errors.role ? 'is-invalid' : ''}`} {...field}>
+                        <option value="">Seleccione un rol</option>
+                        <option value="admin">Administrador</option>
+                        <option value="user">Usuario</option>
+                    </select>}
                 />
                 <div className="invalid-feedback">{errors.role?.message}</div>
             </div>

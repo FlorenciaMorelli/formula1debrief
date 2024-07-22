@@ -44,11 +44,12 @@ const Reviews = () => {
     };
 
     return (
-        <div>
+        <div className="admin-reviews">
             <h2>Listado de Reseñas</h2>
             <Button variant="btn btn-outline-success" onClick={handleShowCreateModal}>
                 CREAR RESEÑA
             </Button>
+            <br />
             <div className="table-responsive">
                 <table className="table">
                     <thead className="thead-dark">
@@ -91,7 +92,7 @@ const Reviews = () => {
                 </table>
             </div>
 
-            <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
+            <Modal id="admin-modal" show={showCreateModal} onHide={handleCloseCreateModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>{editingId ? 'Editar reseña' : 'Crear nueva reseña'}</Modal.Title>
                 </Modal.Header>

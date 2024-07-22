@@ -24,9 +24,9 @@ const Admin = () => {
     };
 
     return (
-        <div className="container mt-4">
-            <h1 className="mb-4">Bienvenido al administrador</h1>
+        <div className="admin-container">
             <button onClick={handleLogout} className='btn-logout'>Cerrar sesión</button>
+            <h1 className="mb-4">Bienvenido al administrador</h1>
             <ul className="nav nav-tabs mb-4">
                 <li className="nav-item">
                     <button className={`nav-link ${activeTab === 'races' ? 'active' : ''}`} onClick={() => handleTabChange('races')}>

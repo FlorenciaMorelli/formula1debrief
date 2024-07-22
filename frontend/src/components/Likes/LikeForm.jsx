@@ -63,7 +63,7 @@ const ReviewForm = ({ id, handleCloseModal }) => {
                         {
                             reviews && reviews.map((review) => {
                                 return(
-                                    <option value={ review.id }>{ review.like }</option>
+                                    <option value={ review.id }>{ review.comment }</option>
                                 )
                             })
                         }
