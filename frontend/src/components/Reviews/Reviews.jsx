@@ -58,6 +58,7 @@ const Reviews = () => {
                             <th scope="col">Usuario</th>
                             <th scope="col">Puntuación</th>
                             <th scope="col">Comentario</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody className="table-group-divider">

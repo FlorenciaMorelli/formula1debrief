@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { readComments, editComment, deleteComment, resetComment } from '../../redux/reducers/commentsReducer.js';
-import CommentForm from './CommentForm.jsx';
+import { readLikes, editLike, deleteLike, resetLike } from '../../redux/reducers/likesReducer.js';
+import LikeForm from './LikeForm.jsx';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 
-const Comments = () => {
-    const comments = useSelector((state) => state.comments.data);
+const Likes = () => {
+    const likes = useSelector((state) => state.likes.data);
     const reviews = useSelector((state) => state.reviews.data);
     const users = useSelector((state) => state.users.data);
     const dispatch = useDispatch();
@@ -16,39 +16,39 @@ const Comments = () => {
 
 
     useEffect(() => {
-        dispatch(readComments());
+        dispatch(readLikes());
     }, [dispatch]);
 
     const handleShowCreateModal = () => {
         setEditingId(null);
-        dispatch(resetComment());
+        dispatch(resetLike());
         setShowCreateModal(true);
     };
     
     const handleShowEditModal = (id) => {
         setEditingId(id);
-        dispatch(editComment({ id: id }));
+        dispatch(editLike({ id: id }));
         setShowCreateModal(true);
     };
 
     const handleCloseCreateModal = () => {
         setEditingId(null);
-        dispatch(resetComment());
+        dispatch(resetLike());
         setShowCreateModal(false);
     };
 
     const handleDelete = (id) => {
-        if (window.confirm('¿Estás seguro de que deseas eliminar este comentario?')) {
-            dispatch(deleteComment(id)).then(() => dispatch(readComments()));
+        if (window.confirm('¿Estás seguro de que deseas eliminar este like?')) {
+            dispatch(deleteLike(id)).then(() => dispatch(readLikes()));
         }
     };
 
 
     return (
         <div>
-            <h2>Listado de Comentarios</h2>
+            <h2>Listado de Likes</h2>
             <Button class="btn btn-outline-success" onClick={handleShowCreateModal}>
-                CREAR COMENTARIO
+                CREAR LIKE
             </Button>
             <div className="table-responsive">
                 <table className="table">
@@ -56,32 +56,31 @@ const Comments = () => {
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Reseña original</th>
-                            <th scope="col">Usuario que realizó el comentario</th>
-                            <th scope="col">Comentario</th>
+                            <th scope="col">Usuario que dio el like</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody className="table-group-divider">
-                        {comments && comments.map((comment) => (
-                            <tr key={comment.id}>
-                                <th scope="row">{comment.id}</th>
+                        {likes && likes.map((like) => (
+                            <tr key={like.id}>
+                                <th scope="row">{like.id}</th>
                                 {
                                     reviews && reviews.map((review) => {
-                                        if (comment.reviewId === review.id) {
+                                        if (like.reviewId === review.id) {
                                             return <td>{ review.comment }</td>
                                         }
                                     })
                                 }
                                 {
                                     users && users.map((user) => {
-                                        if (comment.userId === user.id) {
+                                        if (like.userId === user.id) {
                                             return <td>{ user.username }</td>
                                         }
                                     })
                                 }
-                                <td>{comment.comment}</td>
                                 <td>
-                                <button type="button" class="btn btn-warning mx-1" onClick={() => handleShowEditModal(comment.id)}>Editar</button>
-                                <button type="button" className="btn btn-danger mx-1" onClick={() => handleDelete(comment.id)}>Eliminar</button>
+                                <button type="button" class="btn btn-warning mx-1" onClick={() => handleShowEditModal(like.id)}>Editar</button>
+                                <button type="button" className="btn btn-danger mx-1" onClick={() => handleDelete(like.id)}>Eliminar</button>
                                 </td>
                             </tr>
                         ))}
@@ -91,14 +90,14 @@ const Comments = () => {
 
             <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{editingId ? 'Editar comentario' : 'Crear nuevo comentario'}</Modal.Title>
+                    <Modal.Title>{editingId ? 'Editar like' : 'Crear nuevo like'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <CommentForm id={editingId} handleCloseModal={handleCloseCreateModal} />
+                    <LikeForm id={editingId} handleCloseModal={handleCloseCreateModal} />
                 </Modal.Body>
             </Modal>
         </div>
     );
 };
 
-export default Comments;
+export default Likes;

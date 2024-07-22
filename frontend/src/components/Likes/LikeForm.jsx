@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { createComment, updateComment, readOneComment, readComments } from '../../redux/reducers/commentsReducer';
+import { createLike, updateLike, readOneLike, readLikes } from '../../redux/reducers/likesReducer';
 
-const commentSchema = Yup.object().shape({
+const likeSchema = Yup.object().shape({
     reviewId: Yup.number().required('La reseña es requerida'),
-    userId: Yup.number().required('El usuario es requerido'),
-    comment: Yup.string().required('El comentario es requerido'),
+    userId: Yup.number().required('El usuario es requerido')
 });
 
 const ReviewForm = ({ id, handleCloseModal }) => {
@@ -18,14 +17,14 @@ const ReviewForm = ({ id, handleCloseModal }) => {
     const users = useSelector((state) => state.users.data);
 
     const { control, handleSubmit, setValue, reset, formState: { errors } } = useForm({
-        resolver: yupResolver(commentSchema)
+        resolver: yupResolver(likeSchema)
     });
 
-    const editingObj = useSelector((state) => state.comments.editingObj);
+    const editingObj = useSelector((state) => state.likes.editingObj);
 
     useEffect(() => {
         if (id) {
-            dispatch(readOneComment(id));
+            dispatch(readOneLike(id));
         } else {
             reset();
         }
@@ -35,20 +34,19 @@ const ReviewForm = ({ id, handleCloseModal }) => {
         if (editingObj) {
             setValue('reviewId', editingObj.reviewId);
             setValue('userId', editingObj.userId);
-            setValue('comment', editingObj.comment);
         }
     }, [editingObj, setValue]);
 
     const onSubmit = (data) => {
         if (id) {
-            dispatch(updateComment({ ...data, id })).then(() => {
+            dispatch(updateLike({ ...data, id })).then(() => {
                 handleCloseModal();
-                dispatch(readComments());
+                dispatch(readLikes());
             });
         } else {
-            dispatch(createComment(data)).then(() => {
+            dispatch(createLike(data)).then(() => {
                 handleCloseModal();
-                dispatch(readComments());
+                dispatch(readLikes());
             });
         }
     };
@@ -65,7 +63,7 @@ const ReviewForm = ({ id, handleCloseModal }) => {
                         {
                             reviews && reviews.map((review) => {
                                 return(
-                                    <option value={ review.id }>{ review.comment }</option>
+                                    <option value={ review.id }>{ review.like }</option>
                                 )
                             })
                         }
@@ -90,15 +88,6 @@ const ReviewForm = ({ id, handleCloseModal }) => {
                 </select>}
                 />
                 <div className="invalid-feedback">{errors.userId?.message}</div>
-            </div>
-            <div className="form-group">
-                <label>Comentario</label>
-                <Controller
-                    control={control}
-                    name="comment"
-                    render={({ field }) => <input type="text" className={`form-control ${errors.comment ? 'is-invalid' : ''}`} {...field} />}
-                />
-                <div className="invalid-feedback">{errors.comment?.message}</div>
             </div>
             <br />
             <button type="submit" class="btn btn-success">Guardar</button>
