@@ -30,9 +30,6 @@ function SignUp() {
       const response = await axios.post(`${AUTH_URL}/signup`, data);
       setErrorMessage('');
       setSuccessMessage('Registrado correctamente. Ya puedes iniciar sesión');
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
     } catch (error) {
       setSuccessMessage('');
       setErrorMessage(error.response?.data?.error || 'Ocurrió un error. Intente nuevamente.');
