@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import exampleImage from '../assets/images/example-page.png';
+import landingImage from '../assets/images/home-img.png';
 import LoginContext from '../context/LoginContext';
 
 function Landing() {
@@ -29,7 +29,7 @@ function Landing() {
         </div>
       </div>
       <div className='right'>
-        <img className='img-landing' src={exampleImage} alt='Home Page View' />
+        <img className='img-landing' src={landingImage} alt='Home Page View' />
       </div>
     </div>
   );
