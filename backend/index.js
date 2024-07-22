@@ -521,7 +521,7 @@ app.post('/auth/login', async (req, res) => {
 // Signup
 app.post('/auth/signup', async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, passwordConfirmation } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
             username: username,
@@ -548,11 +548,29 @@ async function populateDatabase() {
         const users = [
             { username: "user1", email: "user1@example.com", password: (await bcrypt.hash("password1", 10)).toString(), role: 'admin' },
             { username: "user2", email: "user2@example.com", password: (await bcrypt.hash("password2", 10)).toString(), role: 'user' },
-            { username: "john_doe", email: "john.doe@example.com", password: (await bcrypt.hash("password123", 10)).toString(), role: 'user'},
+            { username: "john_doe", email: "john.doe@example.com", password: (await bcrypt.hash("password123", 10)).toString(), role: 'user' },
             { username: "jane_smith", email: "jane.smith@example.com", password: (await bcrypt.hash("password456", 10)).toString(), role: 'user' },
             { username: "michael_jones", email: "michael.jones@example.com", password: (await bcrypt.hash("password789", 10)).toString(), role: 'user' },
             { username: "susan_lee", email: "susan.lee@example.com", password: (await bcrypt.hash("password321", 10)).toString(), role: 'user' },
-            { username: "david_clark", email: "david.clark@example.com", password: (await bcrypt.hash("password654", 10)).toString(), role: 'user' }
+            { username: "david_clark", email: "david.clark@example.com", password: (await bcrypt.hash("password654", 10)).toString(), role: 'user' },
+            { username: "emily_turner", email: "emily.turner@example.com", password: (await bcrypt.hash("emily123", 10)).toString(), role: 'user' },
+            { username: "steve_williams", email: "steve.williams@example.com", password: (await bcrypt.hash("steve456", 10)).toString(), role: 'user' },
+            { username: "anna_kim", email: "anna.kim@example.com", password: (await bcrypt.hash("anna789", 10)).toString(), role: 'user' },
+            { username: "chris_brown", email: "chris.brown@example.com", password: (await bcrypt.hash("chris321", 10)).toString(), role: 'user' },
+            { username: "nancy_white", email: "nancy.white@example.com", password: (await bcrypt.hash("nancy654", 10)).toString(), role: 'user' },
+            { username: "paul_green", email: "paul.green@example.com", password: (await bcrypt.hash("paul987", 10)).toString(), role: 'user' },
+            { username: "lisa_black", email: "lisa.black@example.com", password: (await bcrypt.hash("lisa456", 10)).toString(), role: 'user' },
+            { username: "daniel_scott", email: "daniel.scott@example.com", password: (await bcrypt.hash("daniel321", 10)).toString(), role: 'user' },
+            { username: "patricia_taylor", email: "patricia.taylor@example.com", password: (await bcrypt.hash("patricia654", 10)).toString(), role: 'user' },
+            { username: "george_harris", email: "george.harris@example.com", password: (await bcrypt.hash("george123", 10)).toString(), role: 'user' },
+            { username: "karen_martin", email: "karen.martin@example.com", password: (await bcrypt.hash("karen789", 10)).toString(), role: 'user' },
+            { username: "robert_walker", email: "robert.walker@example.com", password: (await bcrypt.hash("robert321", 10)).toString(), role: 'user' },
+            { username: "linda_clark", email: "linda.clark@example.com", password: (await bcrypt.hash("linda654", 10)).toString(), role: 'user' },
+            { username: "maria_fernandez", email: "maria.fernandez@example.com", password: (await bcrypt.hash("maria123", 10)).toString(), role: 'user' },
+            { username: "alejandro_garcia", email: "alejandro.garcia@example.com", password: (await bcrypt.hash("alejandro456", 10)).toString(), role: 'user' },
+            { username: "isabella_lopez", email: "isabella.lopez@example.com", password: (await bcrypt.hash("isabella789", 10)).toString(), role: 'user' },
+            { username: "david_martinez", email: "david.martinez@example.com", password: (await bcrypt.hash("david321", 10)).toString(), role: 'user' },
+            { username: "sofia_diaz", email: "sofia.diaz@example.com", password: (await bcrypt.hash("sofia654", 10)).toString(), role: 'user' },
         ];
 
         const races = [
@@ -613,8 +631,52 @@ async function populateDatabase() {
             { userId: 2, raceId: 17, rating: 4, comment: "The US Grand Prix was thrilling as always." },
             { userId: 3, raceId: 18, rating: 5, comment: "Mexico City delivered a fantastic race!" },
             { userId: 4, raceId: 19, rating: 4, comment: "Brazilian GP was entertaining but had some issues." },
-            { userId: 5, raceId: 20, rating: 5, comment: "Great end to the season at Abu Dhabi!" }
-        ];        
+            { userId: 5, raceId: 20, rating: 5, comment: "Great end to the season at Abu Dhabi!" },
+            { userId: 6, raceId: 21, rating: 3, comment: "Carrera regular, sin muchos sobresaltos." },
+            { userId: 7, raceId: 22, rating: 5, comment: "¡Increíble carrera! Los adelantamientos fueron emocionantes." },
+            { userId: 1, raceId: 23, rating: 4, comment: "Buena carrera, pero el clima fue un factor determinante." },
+            { userId: 2, raceId: 24, rating: 2, comment: "Carrera aburrida, falta de acción." },
+            { userId: 3, raceId: 25, rating: 5, comment: "¡Espectacular! Uno de los mejores Grandes Premios de la historia." },
+            { userId: 4, raceId: 26, rating: 3, comment: "Carrera correcta, pero sin grandes emociones." },
+            { userId: 5, raceId: 27, rating: 4, comment: "Buen espectáculo, aunque el final fue un poco decepcionante." },
+            { userId: 6, raceId: 28, rating: 2, comment: "Carrera lenta y sin oportunidades de adelantamiento." },
+            { userId: 7, raceId: 29, rating: 5, comment: "¡Impresionante! Los pilotos dieron un show increíble." },
+            { userId: 1, raceId: 30, rating: 4, comment: "Carrera entretenida, pero con algunos incidentes innecesarios." },
+            { userId: 2, raceId: 31, rating: 3, comment: "Carrera discreta, sin mucho que destacar." },
+            { userId: 1, raceId: 1, rating: 5, comment: "Fantastic race with an exciting finish!" },
+            { userId: 2, raceId: 1, rating: 4, comment: "Buena carrera, pero esperaba más acción." },
+            { userId: 3, raceId: 1, rating: 3, comment: "Carrera regular, sin grandes sorpresas." },
+            { userId: 4, raceId: 1, rating: 5, comment: "¡Increíble final! Uno de los mejores cierres de carrera." },
+            { userId: 2, raceId: 2, rating: 4, comment: "Great atmosphere, but the race was a bit dull." },
+            { userId: 3, raceId: 2, rating: 3, comment: "Carrera correcta, pero sin emociones fuertes." },
+            { userId: 4, raceId: 2, rating: 5, comment: "Los adelantamientos fueron espectaculares." },
+            { userId: 5, raceId: 2, rating: 4, comment: "Nice race, but could use more overtaking." },
+            { userId: 3, raceId: 3, rating: 3, comment: "Average race, nothing too special." },
+            { userId: 4, raceId: 3, rating: 5, comment: "La estrategia del equipo ganador fue brillante." },
+            { userId: 5, raceId: 3, rating: 4, comment: "Carrera entretenida, pero con algunos errores de los pilotos." },
+            { userId: 6, raceId: 3, rating: 2, comment: "Carrera aburrida, sin oportunidades de adelantamiento." },
+            { userId: 4, raceId: 4, rating: 5, comment: "Incredible performance by the drivers!" },
+            { userId: 5, raceId: 4, rating: 4, comment: "Buen espectáculo, pero el clima afectó la carrera." },
+            { userId: 6, raceId: 4, rating: 3, comment: "Carrera regular, sin grandes sorpresas." },
+            { userId: 7, raceId: 4, rating: 5, comment: "¡Qué carrera! Los pilotos dieron todo." },
+            { userId: 5, raceId: 5, rating: 4, comment: "Nice race, but could use more overtaking." },
+            { userId: 8, raceId: 21, rating: 4, comment: "Una carrera con estrategias interesantes." },
+            { userId: 9, raceId: 22, rating: 5, comment: "¡Excelente carrera! Se mantuvo emocionante hasta el final." },
+            { userId: 10, raceId: 23, rating: 3, comment: "El clima afectó mucho el rendimiento de los pilotos." },
+            { userId: 8, raceId: 24, rating: 2, comment: 'Carrera lenta y con pocos adelantamientos.' },
+            { userId: 9, raceId: 25, rating: 5, comment: "¡Espectacular exhibición de los pilotos!" },
+            { userId: 10, raceId: 26, rating: 4, comment: "Carrera sólida, pero faltaron momentos más emocionantes." },
+            { userId: 8, raceId: 27, rating: 3, comment: "La carrera tuvo un buen ritmo, pero el final no estuvo a la altura." },
+            { userId: 9, raceId: 28, rating: 1, comment: "Una de las carreras más aburridas de la temporada." },
+            { userId: 10, raceId: 29, rating: 5, comment: "¡Impresionante! Los últimos giros fueron de infarto." },
+            { userId: 8, raceId: 30, rating: 4, comment: "Carrera entretenida, pero con algunos errores de estrategia." },
+            { userId: 9, raceId: 31, rating: 3, comment: "Una carrera para olvidar, sin demasiados puntos destacados." },
+            { userId: 6, raceId: 32, rating: 4, comment: "¡Gran debut de la nueva temporada!" },
+            { userId: 7, raceId: 33, rating: 5, comment: "Emocionante carrera con muchas sorpresas." },
+            { userId: 8, raceId: 34, rating: 3, comment: "El circuito no permitió muchos adelantamientos." },
+            { userId: 9, raceId: 35, rating: 4, comment: "Buena carrera, pero las penalizaciones afectaron el resultado." },
+
+        ];
 
         const likes = [
             { reviewId: 1, userId: 2 },
@@ -636,8 +698,23 @@ async function populateDatabase() {
             { reviewId: 17, userId: 3 },
             { reviewId: 18, userId: 4 },
             { reviewId: 19, userId: 2 },
-            { reviewId: 20, userId: 1 }
-        ];        
+            { reviewId: 20, userId: 1 },
+            { reviewId: 41, userId: 7 },
+            { reviewId: 42, userId: 8 },
+            { reviewId: 43, userId: 6 },
+            { reviewId: 44, userId: 10 },
+            { reviewId: 45, userId: 9 },
+            { reviewId: 46, userId: 8 },
+            { reviewId: 47, userId: 6 },
+            { reviewId: 48, userId: 10 },
+            { reviewId: 49, userId: 7 },
+            { reviewId: 50, userId: 9 },
+            { reviewId: 51, userId: 8 },
+            { reviewId: 52, userId: 6 },
+            { reviewId: 53, userId: 10 },
+            { reviewId: 54, userId: 7 },
+            { reviewId: 55, userId: 9 }
+        ];
 
         await User.bulkCreate(users, { validate: true });
         await Race.bulkCreate(races, { validate: true });

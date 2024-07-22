@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    id: sessionStorage.getItem('id') || null,
+    id: sessionStorage.getItem('userId') || null,
     username: sessionStorage.getItem('username') || "",
     email: sessionStorage.getItem('email') || "",
     role: sessionStorage.getItem('role') || "",

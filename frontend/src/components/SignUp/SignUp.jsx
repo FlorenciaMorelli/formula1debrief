@@ -27,10 +27,15 @@ function SignUp({ onLogin }) {
   })
 
   const onSubmit = (data) => {
-    axios.post(`${AUTH_URL}/signup`, data).then((response) => {
-      onLogin(response.data.role);
-      navigate('/login');
-    })
+    try{
+      axios.post(`${AUTH_URL}/signup`, data).then((response) => {
+        console.log("Signup: ", response.status);
+        onLogin(response.data.role);
+        navigate('/login');
+      })
+    } catch (err) {
+      console.log(err);
+    }
   };
   
   return (
