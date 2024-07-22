@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    id: JSON.parse(sessionStorage.getItem('id')) || null,
-    username: JSON.parse(sessionStorage.getItem('username')) || null,
-    email: JSON.parse(sessionStorage.getItem('email')) || null,
-    role: JSON.parse(sessionStorage.getItem('role')) || null,
+    id: sessionStorage.getItem('id') || null,
+    username: sessionStorage.getItem('username') || "",
+    email: sessionStorage.getItem('email') || "",
+    role: sessionStorage.getItem('role') || "",
 };
 
 const authSlice = createSlice({

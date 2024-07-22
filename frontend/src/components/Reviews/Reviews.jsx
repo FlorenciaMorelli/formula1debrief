@@ -46,7 +46,7 @@ const Reviews = () => {
     return (
         <div>
             <h2>Listado de Reseñas</h2>
-            <Button class="btn btn-outline-success" onClick={handleShowCreateModal}>
+            <Button variant="btn btn-outline-success" onClick={handleShowCreateModal}>
                 CREAR RESEÑA
             </Button>
             <div className="table-responsive">

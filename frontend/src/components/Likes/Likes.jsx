@@ -47,7 +47,7 @@ const Likes = () => {
     return (
         <div>
             <h2>Listado de Likes</h2>
-            <Button class="btn btn-outline-success" onClick={handleShowCreateModal}>
+            <Button variant="btn btn-outline-success" onClick={handleShowCreateModal}>
                 CREAR LIKE
             </Button>
             <div className="table-responsive">

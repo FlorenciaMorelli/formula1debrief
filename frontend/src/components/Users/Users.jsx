@@ -42,7 +42,7 @@ const Users = () => {
     return (
         <div>
             <h2>Listado de Usuarios</h2>
-            <Button class="btn btn-outline-success" onClick={handleShowCreateModal}>
+            <Button variant="btn btn-outline-success" onClick={handleShowCreateModal}>
                 CREAR USUARIO
             </Button>
             <div className="table-responsive">
