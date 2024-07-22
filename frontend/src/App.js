@@ -18,11 +18,15 @@ function PrivateRoute({ children, role }) {
     return <Navigate to="/login" />;
   }
 
-  if (auth.role !== role) {
-    return <Navigate to={auth.role === 'admin' ? "/admin" : "/home"} />
+  if(sessionStorage.getItem('role')){
+    if(sessionStorage.getItem('role') === role){
+      return children;
+    } else {
+      return <Navigate to={auth.role === 'admin' ? "/admin" : "/home"} />
+    }
+  } else {
+    return <Navigate to="/login" />;
   }
-
-  return children;
 }
 
 function App() {
@@ -38,8 +42,9 @@ function App() {
             <Route
               path='/home'
               element={
-                <Home />
-                
+                <PrivateRoute role="user">
+                  <Home />
+                </PrivateRoute>
               }
             />
             <Route

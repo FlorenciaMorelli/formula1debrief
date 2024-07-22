@@ -502,8 +502,6 @@ app.post('/auth/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         res.json({ id: user.id, username: user.username, email: user.email, role: user.role });
-        /* const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-        res.json({ token }); */
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });

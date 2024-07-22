@@ -1,14 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+    id: JSON.parse(sessionStorage.getItem('id')) || null,
+    username: JSON.parse(sessionStorage.getItem('username')) || null,
+    email: JSON.parse(sessionStorage.getItem('email')) || null,
+    role: JSON.parse(sessionStorage.getItem('role')) || null,
+};
+
 const authSlice = createSlice({
     name: 'auth',
-    initialState: {
-        isAutenticated: false,
-        id: null,
-        username: null,
-        email: null,
-        role: null
-    },
+    initialState,
     reducers: {
         login: (state, action) => {
             state.isAutenticated = true;
@@ -16,6 +17,10 @@ const authSlice = createSlice({
             state.username = action.payload.username;
             state.email = action.payload.email;
             state.role = action.payload.role;
+            sessionStorage.setItem('userId', action.payload.id);
+            sessionStorage.setItem('username', action.payload.username);
+            sessionStorage.setItem('email', action.payload.email);
+            sessionStorage.setItem('role', action.payload.role);
         },
         logout: (state) => {
             state.isAutenticated = false;
@@ -23,6 +28,10 @@ const authSlice = createSlice({
             state.username = null;
             state.email = null;
             state.role = null;
+            sessionStorage.removeItem('userId');
+            sessionStorage.removeItem('username');
+            sessionStorage.removeItem('email');
+            sessionStorage.removeItem('role');
         }
     }
 })
