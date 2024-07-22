@@ -504,12 +504,12 @@ app.post('/auth/login', async (req, res) => {
     try {
         const user = await User.findOne({ where: { email } }); // Search for an user with that email
         if (!user) {
-            return res.status(401).json({ error: 'Invalid credentials' }); // If the user doesn't exist, it returns a 401 error
+            return res.status(401).json({ error: 'El email o la contraseña son incorrectos.' }); // If the user doesn't exist, it returns a 401 error
         }
         // Bcrypt lets us compare the two by hashing the password we're reciving and comparing it to the hash we have in our table
         const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).json({ error: 'El email o la contraseña son incorrectos.' });
         }
         res.json({ id: user.id, username: user.username, email: user.email, role: user.role });
     } catch (error) {
@@ -520,8 +520,19 @@ app.post('/auth/login', async (req, res) => {
 
 // Signup
 app.post('/auth/signup', async (req, res) => {
+    const { username, email, password } = req.body;
     try {
-        const { username, email, password, passwordConfirmation } = req.body;
+        // Check if username or email already exists
+        const existingUser = await User.findOne({ where: { email } });
+        if (existingUser) {
+            return res.status(409).json({ error: 'El correo electrónico ya se encuentra registrado.' });
+        }
+
+        const existingUsername = await User.findOne({ where: { username } });
+        if (existingUsername) {
+            return res.status(409).json({ error: 'El nombre de usuario ya está en uso. Elija uno diferente.' });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
             username: username,
@@ -529,10 +540,10 @@ app.post('/auth/signup', async (req, res) => {
             password: hashedPassword,
             role: 'user'
         });
-        res.json({ id: user.id });
+        res.status(201).json({ id: user.id });
     } catch (error) {
         console.error(error);
-        res.status(409).json({ error: error });
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
