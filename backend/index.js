@@ -108,14 +108,19 @@ const Review = sequelize.define('Review', {
     timestamps: true
 });
 
-const Comment = sequelize.define('Comment', {
+const Like = sequelize.define('Like', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    comment: {
-        type: DataTypes.TEXT
+    reviewId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     },
     createdAt: {
         type: DataTypes.DATE,
@@ -138,17 +143,17 @@ Race.hasMany(Review, {
 });
 Review.belongsTo(Race, { foreignKey: 'raceId' });
 
-Review.hasMany(Comment, {
+Review.hasMany(Like, {
     foreignKey: 'reviewId',
     onDelete: 'CASCADE'
 });
-Comment.belongsTo(Review, { foreignKey: 'reviewId' });
+Like.belongsTo(Review, { foreignKey: 'reviewId' });
 
-User.hasMany(Comment, {
+User.hasMany(Like, {
     foreignKey: 'userId',
     onDelete: 'CASCADE'
 });
-Comment.belongsTo(User, { foreignKey: 'userId' });
+Like.belongsTo(User, { foreignKey: 'userId' });
 
 // Configurations, like CORS usage and body parsing to json
 app.use(cors());
@@ -331,77 +336,77 @@ app.delete('/api/races/:raceId', async (req, res) => {
 });
 
 
-/* COMMENTS */
-// Get comments
-app.get('/api/comments', async (req, res) => {
+/* LIKES */
+// Get likes
+app.get('/api/likes', async (req, res) => {
     try {
-        const comments = await Comment.findAll();
-        res.json(comments);
+        const likes = await Like.findAll();
+        res.json(likes);
     } catch (error) {
-        console.error("Error fetching comments: ", error);
-        res.status(500).json({ error: "Error fetching comments" });
+        console.error("Error fetching likes: ", error);
+        res.status(500).json({ error: "Error fetching likes" });
     }
 });
 
-// Obtain comment by ID
-app.get('/api/comments/:id', async (req, res) => {
+// Obtain like by ID
+app.get('/api/likes/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const comment = await Comment.findByPk(id);
-        if (comment === null) {
-            res.status(404).json({ error: `No comment found with ID ${id}.` });
+        const like = await Like.findByPk(id);
+        if (like === null) {
+            res.status(404).json({ error: `No like found with ID ${id}.` });
         } else {
-            res.json(comment);
+            res.json(like);
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'An error occurred while fetching the comment.' });
+        res.status(500).json({ error: 'An error occurred while fetching the like.' });
     }
 });
 
-// Post new comment
-app.post('/api/comments', async (req, res) => {
+// Post new like
+app.post('/api/likes', async (req, res) => {
     try {
-        const comment = await Comment.build(req.body)
-        await comment.validate()
-        const validatedComment = await Comment.create(req.body)
-        res.json({ id: validatedComment.id })
+        const like = await Like.build(req.body)
+        await like.validate()
+        const validatedLike = await Like.create(req.body)
+        res.json({ id: validatedLike.id })
     } catch (error) {
         console.error(error);
         res.status(409).json({ error: error });
     }
 });
 
-// Edit comment
-app.patch('/api/comments/:id', async (req, res) => {
+// Edit like
+app.patch('/api/likes/:id', async (req, res) => {
     const { id } = req.params;
-    const comment = req.body;
+    const like = req.body;
     try {
-        const [, affectedRows] = await Comment.update(
-            comment,
+        const [, affectedRows] = await Like.update(
+            like,
             { where: { id } }
         );
         if (affectedRows === 0) {
-            res.status(404).json({ error: `No comment found with ID ${id}.` });
+            res.status(404).json({ error: `No like found with ID ${id}.` });
         } else {
             res.json({ id: id });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'An error occurred while updating the comment.' });
+        res.status(500).json({ error: 'An error occurred while updating the like.' });
     }
 });
 
-// Delete comment
-app.delete('/api/comments/:id', async (req, res) => {
+// Delete like
+app.delete('/api/likes/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const comment = await Comment.findOne({ where: { id } });
-        if (!comment) {
-            return res.status(404).json({ error: 'Comment not found' });
+        const like = await Like.findOne({ where: { id } });
+        if (!like) {
+            return res.status(404).json({ error: 'Like not found' });
         }
-        await comment.destroy();
-        res.json('Comment deleted');
+        await like.destroy();
+        res.json('Like deleted');
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -532,9 +537,9 @@ async function populateDatabase() {
     const userCount = await User.count();
     const raceCount = await Race.count();
     const reviewCount = await Review.count();
-    const commentCount = await Comment.count();
+    const likeCount = await Like.count();
 
-    if (userCount === 0 && raceCount === 0 && reviewCount === 0 && commentCount === 0) {
+    if (userCount === 0 && raceCount === 0 && reviewCount === 0 && likeCount === 0) {
         const users = [
             { username: "user1", email: "user1@example.com", password: (await bcrypt.hash("password1", 10)).toString(), role: 'admin' },
             { username: "user2", email: "user2@example.com", password: (await bcrypt.hash("password2", 10)).toString(), role: 'user' },
@@ -602,33 +607,33 @@ async function populateDatabase() {
             { userId: 5, raceId: 20, rating: 5, comment: "Great end to the season at Abu Dhabi!" }
         ];        
 
-        const comments = [
-            { reviewId: 1, userId: 2, comment: "I agree, it was a thrilling race!" },
-            { reviewId: 2, userId: 3, comment: "I found it quite exciting, especially the second half." },
-            { reviewId: 3, userId: 1, comment: "I think you might be a bit harsh, it was quite good." },
-            { reviewId: 4, userId: 5, comment: "Definitely one of the highlights of the season!" },
-            { reviewId: 5, userId: 4, comment: "I felt the same, more overtaking would have been great." },
-            { reviewId: 6, userId: 3, comment: "Monaco's race was amazing, loved every minute!" },
-            { reviewId: 7, userId: 1, comment: "Agreed, it was a good race but not the best." },
-            { reviewId: 8, userId: 2, comment: "Weather made it hard to enjoy the race fully." },
-            { reviewId: 9, userId: 5, comment: "Best race of the season, hands down." },
-            { reviewId: 10, userId: 3, comment: "True, the track did make it difficult for overtaking." },
-            { reviewId: 11, userId: 4, comment: "Spa is always a classic, great racing action!" },
-            { reviewId: 12, userId: 2, comment: "Dutch GP had some great moments, enjoyed it." },
-            { reviewId: 13, userId: 1, comment: "I was a bit disappointed, expected more excitement." },
-            { reviewId: 14, userId: 5, comment: "Singapore under the lights is always spectacular." },
-            { reviewId: 15, userId: 2, comment: "It was good but not as action-packed as I hoped." },
-            { reviewId: 16, userId: 1, comment: "Qatar was amazing, great race overall." },
-            { reviewId: 17, userId: 3, comment: "US GP is always fun, enjoyed it a lot." },
-            { reviewId: 18, userId: 4, comment: "Mexico City provided an exciting race, well worth watching." },
-            { reviewId: 19, userId: 2, comment: "Brazilian GP had some great moments but some issues too." },
-            { reviewId: 20, userId: 1, comment: "A perfect ending to the season, loved it." }
+        const likes = [
+            { reviewId: 1, userId: 2 },
+            { reviewId: 2, userId: 3 },
+            { reviewId: 3, userId: 1 },
+            { reviewId: 4, userId: 5 },
+            { reviewId: 5, userId: 4 },
+            { reviewId: 6, userId: 3 },
+            { reviewId: 7, userId: 1 },
+            { reviewId: 8, userId: 2 },
+            { reviewId: 9, userId: 5 },
+            { reviewId: 10, userId: 3 },
+            { reviewId: 11, userId: 4 },
+            { reviewId: 12, userId: 2 },
+            { reviewId: 13, userId: 1 },
+            { reviewId: 14, userId: 5 },
+            { reviewId: 15, userId: 2 },
+            { reviewId: 16, userId: 1 },
+            { reviewId: 17, userId: 3 },
+            { reviewId: 18, userId: 4 },
+            { reviewId: 19, userId: 2 },
+            { reviewId: 20, userId: 1 }
         ];        
 
         await User.bulkCreate(users, { validate: true });
         await Race.bulkCreate(races, { validate: true });
         await Review.bulkCreate(reviews, { validate: true });
-        await Comment.bulkCreate(comments, { validate: true });
+        await Like.bulkCreate(likes, { validate: true });
 
         console.log("Database populated successfully.");
     } else {

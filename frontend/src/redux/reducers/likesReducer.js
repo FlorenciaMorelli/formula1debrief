@@ -4,37 +4,37 @@ import axios from "axios";
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 // Thunk para obtener todas las reseñas
-export const readComments = createAsyncThunk('comments/readComments', async () => {
-    const response = await axios.get(`${API_URL}/comments`);
+export const readLikes = createAsyncThunk('likes/readLikes', async () => {
+    const response = await axios.get(`${API_URL}/likes`);
     return response.data;
 });
 
 // Thunk para obtener una reseña por su ID
-export const readOneComment = createAsyncThunk('comments/readOneComment', async (id) => {
-    const response = await axios.get(`${API_URL}/comments/${id}`);
+export const readOneLike = createAsyncThunk('likes/readOneLike', async (id) => {
+    const response = await axios.get(`${API_URL}/likes/${id}`);
     return response.data;
 });
 
 // Thunk para crear una nueva reseña
-export const createComment = createAsyncThunk('comments/createComment', async (comment) => {
-    const response = await axios.post(`${API_URL}/comments`, comment);
+export const createLike = createAsyncThunk('likes/createLike', async (like) => {
+    const response = await axios.post(`${API_URL}/likes`, like);
     return response.data;
 });
 
 // Thunk para actualizar una reseña existente
-export const updateComment = createAsyncThunk('comments/updateComment', async (comment) => {
-    const response = await axios.patch(`${API_URL}/comments/${comment.id}`, comment);
+export const updateLike = createAsyncThunk('likes/updateLike', async (like) => {
+    const response = await axios.patch(`${API_URL}/likes/${like.id}`, like);
     return response.data;
 });
 
 // Thunk para eliminar una reseña
-export const deleteComment = createAsyncThunk('comments/deleteComment', async (id) => {
-    await axios.delete(`${API_URL}/comments/${id}`);
+export const deleteLike = createAsyncThunk('likes/deleteLike', async (id) => {
+    await axios.delete(`${API_URL}/likes/${id}`);
     return id;
 });
 
-const commentsSlice = createSlice({
-    name: 'comments',
+const likesSlice = createSlice({
+    name: 'likes',
     initialState: {
         data: [],
         status: 'idle',
@@ -43,87 +43,87 @@ const commentsSlice = createSlice({
         editingObj: null
     },
     reducers: {
-        editComment: (state, action) => {
+        editLike: (state, action) => {
             state.editingId = action.payload.id;
             state.editingObj = action.payload;
         },
-        resetComment: (state) => {
+        resetLike: (state) => {
             state.editingId = null;
             state.editingObj = null;
         }
     },
     extraReducers: (builder) => {
         builder
-            // readComments
-            .addCase(readComments.pending, (state) => {
+            // readLikes
+            .addCase(readLikes.pending, (state) => {
                 state.status = 'loading';
                 state.error = null;
             })
-            .addCase(readComments.fulfilled, (state, action) => {
+            .addCase(readLikes.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.data = action.payload;
                 state.error = null;
             })
-            .addCase(readComments.rejected, (state, action) => {
+            .addCase(readLikes.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            // readOneComment
-            .addCase(readOneComment.pending, (state) => {
+            // readOneLike
+            .addCase(readOneLike.pending, (state) => {
                 state.editingObj = null;
                 state.error = null;
             })
-            .addCase(readOneComment.fulfilled, (state, action) => {
+            .addCase(readOneLike.fulfilled, (state, action) => {
                 state.editingObj = action.payload;
                 state.error = null;
             })
-            .addCase(readOneComment.rejected, (state, action) => {
+            .addCase(readOneLike.rejected, (state, action) => {
                 state.editingId = null;
                 state.editingObj = null;
                 state.status = 'error';
                 state.error = action.error.message;
             })
-            // createComment
-            .addCase(createComment.pending, (state) => {
+            // createLike
+            .addCase(createLike.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(createComment.fulfilled, (state, action) => {
+            .addCase(createLike.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.data.push(action.payload);
             })
-            .addCase(createComment.rejected, (state, action) => {
+            .addCase(createLike.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            // updateComment
-            .addCase(updateComment.pending, (state) => {
+            // updateLike
+            .addCase(updateLike.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(updateComment.fulfilled, (state, action) => {
+            .addCase(updateLike.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                const index = state.data.findIndex(comment => comment.id === action.payload.id);
+                const index = state.data.findIndex(like => like.id === action.payload.id);
                 if (index !== -1) {
                     state.data[index] = action.payload;
                 }
             })
-            .addCase(updateComment.rejected, (state, action) => {
+            .addCase(updateLike.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            // deleteComment
-            .addCase(deleteComment.pending, (state) => {
+            // deleteLike
+            .addCase(deleteLike.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(deleteComment.fulfilled, (state, action) => {
+            .addCase(deleteLike.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.data = state.data.filter(comment => comment.id !== action.payload);
+                state.data = state.data.filter(like => like.id !== action.payload);
             })
-            .addCase(deleteComment.rejected, (state, action) => {
+            .addCase(deleteLike.rejected, (state, action) => {
                 state.status = 'error';
                 state.error = action.error.message;
             });
     }
 });
 
-export const { editComment, resetComment } = commentsSlice.actions;
-export default commentsSlice.reducer;
+export const { editLike, resetLike } = likesSlice.actions;
+export default likesSlice.reducer;
